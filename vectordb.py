@@ -5,6 +5,7 @@ from chromadb.utils.data_loaders import ImageLoader
 from glob import glob
 
 
+
 # client = chromadb.Client()
 # embedding_function = OpenCLIPEmbeddingFunction()
 # data_loader = ImageLoader()
