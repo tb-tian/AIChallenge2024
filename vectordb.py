@@ -4,7 +4,7 @@ from chromadb.utils.embedding_functions import OpenCLIPEmbeddingFunction
 from chromadb.utils.data_loaders import ImageLoader
 from glob import glob
 
-
+# This python script is used to use vector database, which is chromadb instead of npy (numpy arrays)
 
 # client = chromadb.Client()
 # embedding_function = OpenCLIPEmbeddingFunction()
