@@ -6,11 +6,11 @@ import os
 from PIL import Image
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load('ViT-B/32', device)
+model, preprocess = clip.load("ViT-B/32", device)
 st.set_page_config(layout="wide")
 st.write("Hello")
 
-keyframe_path = f"/home/thienan/Downloads/DataSampleAIC23-20240811T084355Z-002/DataSampleAIC23/Keyframes_L01/keyframes/L01_V001"
+keyframe_path = f"./datasets/keyframes/L01_V001"
 keyframe_files = os.listdir(keyframe_path)
 col1, col2, col3, col4 = st.columns(4)
 WIDTH = 350
@@ -30,5 +30,5 @@ for i, file in enumerate(sorted(keyframe_files)):
         with col4:
             st.image(image, caption=f"{file}", width=WIDTH)
 
-# clip_path = np.load("/home/thienan/Downloads/DataSampleAIC23-20240811T084355Z-002/DataSampleAIC23/clip-features-vit-b32-sample/clip-features/L01_V001.npy")
+# clip_path = np.load("./datasets/clip-features-vit-b32-sample/clip-features/L01_V001.npy")
 # print(clip_path.shape)
