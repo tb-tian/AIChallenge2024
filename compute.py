@@ -67,4 +67,4 @@ for v, k, similarity in top_5:
     image = Image.open(file_path)
     image.show()
     print(f"Video: {v}, Keyframe: {k}, Similarity: {similarity}")
-    #aa
+    # ahihi

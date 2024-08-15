@@ -6,20 +6,24 @@ from glob import glob
 
 # This python script is used to use vector database, which is chromadb instead of npy (numpy arrays)
 
-# client = chromadb.Client()
-# embedding_function = OpenCLIPEmbeddingFunction()
-# data_loader = ImageLoader()
-# collection = client.create_collection(
-#     name = 'keyframes',
-#     embedding_function=embedding_function,
-#     data_loader=data_loader,
-# )
+# Initialize the client, embedding function and data loader
+client = chromadb.Client()
+embedding_function = OpenCLIPEmbeddingFunction()
+data_loader = ImageLoader()
 
-# URIs of the images
+# Create a collection
+collection = client.create_collection(
+    name = 'keyframes',
+    embedding_function=embedding_function,
+    data_loader=data_loader,
+)
+
+# Init uris array and ids array
 uris = glob('/home/thienan/Downloads/DataSampleAIC23-20240811T084355Z-002/DataSampleAIC23/Keyframes_L01/keyframes/L01_V001/*.jpg')
 ids = []
+
 # Load images and generate embeddings
-# embeddings = [embedding_function.encode_image(uri) for uri in uris]
+embeddings = [embedding_function.encode_image(uri) for uri in uris]
 
 for uri in uris:
     _, id = uri[:-4].rsplit('/',1)
