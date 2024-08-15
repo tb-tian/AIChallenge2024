@@ -6,7 +6,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly
 pip install -r requirements.txt
 ```
 
-## Dataset
+## Sample Dataset
 
 [link](https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l)
 
