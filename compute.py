@@ -38,7 +38,7 @@ for v in all_video:
 
 
 # Query here
-query = "Four people"
+query = "England"
 # Clip command to embedded the query
 query = clip.tokenize(query).to(device) 
 query_feature = model.encode_text(query)
