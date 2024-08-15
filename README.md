@@ -20,6 +20,20 @@ cd datasets
 your projects structure should look like this
 
 ```
+.
+├── compute.py
+├── datasets
+│   ├── AIC-2023-Baseline-v1.ipynb
+│   ├── clip-features-vit-b32-sample
+│   ├── clip-features-vit-b32-sample.zip
+│   ├── keyframes
+│   ├── Keyframes_L01.zip
+│   ├── map-keyframes-sample
+│   └── map-keyframes-sample.zip
+├── README.md
+├── requirements.txt
+├── user_interface.py
+└── vectordb.py
 
 ```
 
