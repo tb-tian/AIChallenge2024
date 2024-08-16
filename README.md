@@ -1,9 +1,19 @@
 ## Installation
 
+### For Ubuntu
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly recommend using python package manager like [conda](https://docs.conda.io/en/latest/)
 
 ```bash
 pip install -r requirements.txt
+```
+
+### For Window
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly recommend using python package manager like [conda](https://docs.conda.io/en/latest/)
+
+```bash
+pip install git+https://github.com/openai/CLIP.git
+pip install git+git+https://github.com/chroma-core/chroma.git
+pip install streamlit
 ```
 
 ## Sample Dataset
