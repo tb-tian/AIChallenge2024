@@ -53,7 +53,7 @@ your projects structure should look like this
 
 Testing UI
 ```bash
-streamlit run user_interface.py
+streamlit run web_app.py
 ```
 
 Testing the model and sample data
