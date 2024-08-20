@@ -4,6 +4,8 @@ import clip
 import torch
 import os
 from PIL import Image
+from io import BytesIO
+import base64
 
 from vectordb import VectorDB
 
@@ -14,7 +16,8 @@ if "vectordb" not in st.session_state:
 vectordb = st.session_state["vectordb"]
 
 if __name__ == "__main__":
-    st.set_page_config(layout="wide")
+    # st.set_page_config(layout="wide")
+    st.set_page_config(page_title="TIAN™ Video Search", page_icon="🔍", layout="wide")
 
     st.header("TIAN™ Video Search")
     st.write(
@@ -26,20 +29,34 @@ if __name__ == "__main__":
 
     res = vectordb.search_text(search_term)
 
+    # Create columns for layout
     col1, col2, col3, col4 = st.columns(4)
+    
 
+    # Assign results to columns
     for i, (v, k, similarity) in enumerate(res):
         file_path = f"./datasets/keyframes/{v}/{k}.jpg"
-
+        
+        # Use column assignment based on index
         if i % 4 == 0:
-            with col1:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+            col = col1
         elif i % 4 == 1:
-            with col2:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+            col = col2
         elif i % 4 == 2:
-            with col3:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+            col = col3
         else:
-            with col4:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+            col = col4
+
+        with open(file_path, "rb") as f:
+                data = base64.b64encode(f.read()).decode("utf-8")
+        
+        # Display the HTML content
+        with col:
+            st.html(
+                f"""
+                <div style="width: {WIDTH}px; text-align: center;">
+                    <img src="data:image/gif;base64, {data}" style="width: {WIDTH}px; height: {WIDTH}px; object-fit: cover;">
+                    <p>do some thing :v</p>
+                </div>
+                """
+            )
