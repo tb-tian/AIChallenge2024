@@ -5,30 +5,41 @@ import torch
 import os
 from PIL import Image
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device)
-st.set_page_config(layout="wide")
-st.write("Hello")
+from vectordb import VectorDB
 
-keyframe_path = f"./datasets/keyframes/L01_V001"
-keyframe_files = os.listdir(keyframe_path)
-col1, col2, col3, col4 = st.columns(4)
 WIDTH = 350
-for i, file in enumerate(sorted(keyframe_files)):
-    image_path = os.path.join(keyframe_path, file)
-    image = Image.open(image_path)
-    if i % 4 == 0:
-        with col1:
-            st.image(image, caption=f"{file}", width=WIDTH)
-    elif i % 4 == 1:
-        with col2:
-            st.image(image, caption=f"{file}", width=WIDTH)
-    elif i % 4 == 2:
-        with col3:
-            st.image(image, caption=f"{file}", width=WIDTH)
-    else:
-        with col4:
-            st.image(image, caption=f"{file}", width=WIDTH)
 
-# clip_path = np.load("./datasets/clip-features-vit-b32-sample/clip-features/L01_V001.npy")
-# print(clip_path.shape)
+if "vectordb" not in st.session_state:
+    st.session_state["vectordb"] = VectorDB()
+vectordb = st.session_state["vectordb"]
+
+if __name__ == "__main__":
+    st.set_page_config(layout="wide")
+
+    st.header("TIAN™ Video Search")
+    st.write(
+        "Welcome to TIAN Video Search. You can blah blah blah here. And blah blah blah there also."
+    )
+    search_term = st.text_input("Search: ")
+
+    print("searching...", search_term)
+
+    res = vectordb.search_text(search_term)
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    for i, (v, k, similarity) in enumerate(res):
+        file_path = f"./datasets/keyframes/{v}/{k}.jpg"
+
+        if i % 4 == 0:
+            with col1:
+                st.image(file_path, caption=f"todo", width=WIDTH)
+        elif i % 4 == 1:
+            with col2:
+                st.image(file_path, caption=f"todo", width=WIDTH)
+        elif i % 4 == 2:
+            with col3:
+                st.image(file_path, caption=f"todo", width=WIDTH)
+        else:
+            with col4:
+                st.image(file_path, caption=f"todo", width=WIDTH)
