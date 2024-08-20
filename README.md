@@ -53,18 +53,18 @@ your projects structure should look like this
 
 Testing UI
 ```bash
-streamlit run user_interface.py
+streamlit run web_app.py
 ```
 
 Testing the model and sample data
 ```bash
-python compute.py
+python cli.py
 ```
 
 
 # Coding style
 
-PEP-8 with black formater 
+PEP-8 with black formatter 
 
 ```
 black .

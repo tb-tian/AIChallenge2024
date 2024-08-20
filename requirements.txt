@@ -10,8 +10,6 @@ build==1.2.1
 cachetools==5.4.0
 certifi==2024.7.4
 charset-normalizer==3.3.2
-chroma-hnswlib==0.7.6
-chromadb @ git+https://github.com/chroma-core/chroma.git@f66b47d7283fde4353385d9d6f077a3c1e35bf02
 click==8.1.7
 clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
 coloredlogs==15.0.1
@@ -132,3 +130,4 @@ websockets==12.0
 wheel==0.43.0
 wrapt==1.16.0
 zipp==3.20.0
+
