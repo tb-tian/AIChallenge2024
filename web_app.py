@@ -1,8 +1,5 @@
 import streamlit as st
 import numpy as np
-import clip
-import torch
-import os
 from PIL import Image
 
 from vectordb import VectorDB
@@ -13,8 +10,24 @@ if "vectordb" not in st.session_state:
     st.session_state["vectordb"] = VectorDB()
 vectordb = st.session_state["vectordb"]
 
+
+@st.dialog("Playing source video")
+def video_dialog(source):
+    st.write(f"Source {source}")
+    st.video(f"./datasets/video/{v}.mp4")
+
+
 if __name__ == "__main__":
     st.set_page_config(layout="wide")
+    hide_img_fs = """
+    <style>
+    button[title="View fullscreen"]{
+        visibility: hidden;
+    }
+    </style>
+    """
+
+    st.markdown(hide_img_fs, unsafe_allow_html=True)
 
     st.header("TIAN™ Video Search")
     st.write(
@@ -30,16 +43,25 @@ if __name__ == "__main__":
 
     for i, (v, k, similarity) in enumerate(res):
         file_path = f"./datasets/keyframes/{v}/{k}.jpg"
-
         if i % 4 == 0:
             with col1:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+                st.image(file_path, width=WIDTH)
+                if st.button(f"view {v}/{k}"):
+                    video_dialog(f"{v}/{k}")
         elif i % 4 == 1:
             with col2:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+                st.image(file_path, width=WIDTH)
+                if st.button(f"view {v}/{k}"):
+                    video_dialog(f"{v}/{k}")
+
         elif i % 4 == 2:
             with col3:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+                st.image(file_path, width=WIDTH)
+                if st.button(f"view {v}/{k}"):
+                    video_dialog(f"{v}/{k}")
+
         else:
             with col4:
-                st.image(file_path, caption=f"todo", width=WIDTH)
+                st.image(file_path, width=WIDTH)
+                if st.button(f"view {v}/{k}"):
+                    video_dialog(f"{v}/{k}")
