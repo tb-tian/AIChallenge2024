@@ -1,4 +1,5 @@
 import time
+from typing import Tuple
 import streamlit as st
 import numpy as np
 import clip
@@ -58,7 +59,7 @@ class VectorDB:
 
         print(f"loaded vectordb in {time.time()-start_time}s")
 
-    def search_text(self, user_query) -> str:
+    def search_text(self, user_query, limit=10) -> Tuple:
         query = clip.tokenize(user_query).to(self.device)
         query_feature = self.model.encode_text(query)
 
@@ -66,7 +67,7 @@ class VectorDB:
         query_embedding = (
             query_feature.detach().numpy().reshape(1, -1).astype("float32")
         )
-        distances, indices = self.index.search(query_embedding, 5)
+        distances, indices = self.index.search(query_embedding, limit)
 
         # Retrieve the top 5 most suitable to the query
         top_5 = [
