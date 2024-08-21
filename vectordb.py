@@ -9,7 +9,7 @@ import faiss
 class VectorDB:
     def __init__(self):
         start_time = time.time()
-        
+
         # clip model setup
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model, preprocess = clip.load("ViT-B/32", self.device)
