@@ -4,7 +4,8 @@ from PIL import Image
 
 if __name__ == "__main__":
     v = VectorDB()
-    res = v.search_text("cat")
+    query = input("Your query term: ")
+    res = v.search_text(query)
 
     for v, k, similarity in res:
         file_path = f"./datasets/keyframes/{v}/{k}.jpg"
