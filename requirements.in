@@ -1,0 +1,7 @@
+streamlit
+numpy
+clip
+torch
+faiss-cpu
+open_clip_torch
+openai-whisper

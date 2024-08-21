@@ -7,7 +7,9 @@ import time
 import faiss
 from tqdm import tqdm
 
-model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
+model, _, preprocess = open_clip.create_model_and_transforms(
+    "ViT-B-32", pretrained="openai"
+)
 model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
 
 
@@ -18,6 +20,7 @@ def embedding(pic_path):
         pic_feat = model.encode_image(pic)
         pic_feat /= pic_feat.norm(dim=-1, keepdim=True)
     return pic_feat.cpu().numpy()
+
 
 def main():
     # Create an array of keyframe and video. Remember to change the path that suitable to local machine
@@ -41,12 +44,18 @@ def main():
         video_keyframe_dict[k] = sorted(v)
 
     for v in tqdm(all_video, desc="Processing videos"):
-        keyframe_array = np.empty((0, 512))  # Initialize an empty array with shape (0, 512)
-        for k in tqdm(video_keyframe_dict[v], desc=f"Processing keyframes for video {v}", leave=False):
+        keyframe_array = np.empty(
+            (0, 512)
+        )  # Initialize an empty array with shape (0, 512)
+        for k in tqdm(
+            video_keyframe_dict[v],
+            desc=f"Processing keyframes for video {v}",
+            leave=False,
+        ):
             keyframe_path = f"./datasets/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
-        np.save(f"./datasets/clip-features/{v}.npy",keyframe_array)
+        np.save(f"./datasets/clip-features/{v}.npy", keyframe_array)
 
     # Load clip feature into an dictionary of numpy arrays
     embedding_dict = {}
@@ -66,7 +75,7 @@ def main():
             embedding_info.append((v, k))
     embedding_array = np.array(embedding_list)
     info_array = np.array(embedding_info)
-    
+
     # Build the faiss index
     index = faiss.IndexFlatL2(embedding_array.shape[1])
     index.add(embedding_array)
@@ -74,7 +83,7 @@ def main():
 
     # Save info_array into a npy file
     np.save("./datasets/info.npy", info_array)
-    
+
 
 if __name__ == "__main__":
     start = time.time()
