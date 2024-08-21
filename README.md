@@ -19,7 +19,7 @@ pip install streamlit faiss-cpu open-clip-torch
 
 ## Adding new dependencies
 
-recommend using https://pypi.org/project/pip-tools/
+recommend using https://github.com/astral-sh/uv
 
 ## Sample Dataset
 
