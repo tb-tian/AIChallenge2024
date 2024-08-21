@@ -14,7 +14,7 @@ vectordb = st.session_state["vectordb"]
 @st.dialog("Playing source video")
 def video_dialog(source):
     st.write(f"Source {source}")
-    st.video(f"./datasets/video/{v}.mp4")
+    st.video(f"./datasets/video/{source}.mp4")
 
 
 if __name__ == "__main__":
@@ -47,21 +47,21 @@ if __name__ == "__main__":
             with col1:
                 st.image(file_path, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
-                    video_dialog(f"{v}/{k}")
+                    video_dialog(v)
         elif i % 4 == 1:
             with col2:
                 st.image(file_path, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
-                    video_dialog(f"{v}/{k}")
+                    video_dialog(v)
 
         elif i % 4 == 2:
             with col3:
                 st.image(file_path, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
-                    video_dialog(f"{v}/{k}")
+                    video_dialog(v)
 
         else:
             with col4:
                 st.image(file_path, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
-                    video_dialog(f"{v}/{k}")
+                    video_dialog(v)
