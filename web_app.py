@@ -41,27 +41,27 @@ if __name__ == "__main__":
 
     col1, col2, col3, col4 = st.columns(4)
 
-    for i, (v, k, similarity) in enumerate(res):
-        file_path = f"./datasets/keyframes/{v}/{k}.jpg"
+    for i, (video, kf, similarity) in enumerate(res):
+        file_path = f"./datasets/keyframes/{video}/{kf}.jpg"
         if i % 4 == 0:
             with col1:
                 st.image(file_path, caption=similarity, width=WIDTH)
-                if st.button(f"view {v}/{k}"):
-                    video_dialog(v)
+                if st.button(f"view {video}/{kf}"):
+                    video_dialog(video)
         elif i % 4 == 1:
             with col2:
                 st.image(file_path, caption=similarity, width=WIDTH)
-                if st.button(f"view {v}/{k}"):
-                    video_dialog(v)
+                if st.button(f"view {video}/{kf}"):
+                    video_dialog(video)
 
         elif i % 4 == 2:
             with col3:
                 st.image(file_path, caption=similarity, width=WIDTH)
-                if st.button(f"view {v}/{k}"):
-                    video_dialog(v)
+                if st.button(f"view {video}/{kf}"):
+                    video_dialog(video)
 
         else:
             with col4:
                 st.image(file_path, caption=similarity, width=WIDTH)
-                if st.button(f"view {v}/{k}"):
-                    video_dialog(v)
+                if st.button(f"view {video}/{kf}"):
+                    video_dialog(video)
