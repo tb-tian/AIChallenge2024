@@ -43,15 +43,15 @@ def main():
     for v in tqdm(all_video, desc="Processing videos"):
         keyframe_array = np.empty((0, 512))  # Initialize an empty array with shape (0, 512)
         for k in tqdm(video_keyframe_dict[v], desc=f"Processing keyframes for video {v}", leave=False):
-            keyframe_path = f"./test_datasets/keyframes/{v}/{k}.jpg"
+            keyframe_path = f"./datasets/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
-        np.save(f"./test_datasets/clip-features-vit-b32-sample/clip-features/{v}.npy",keyframe_array)
+        np.save(f"./datasets/clip-features-vit-b32-sample/clip-features/{v}.npy",keyframe_array)
 
     # Load clip feature into an dictionary of numpy arrays
     embedding_dict = {}
     for v in all_video:
-        clip_path = f"./test_datasets/clip-features-vit-b32-sample/clip-features/{v}.npy"
+        clip_path = f"./datasets/clip-features-vit-b32-sample/clip-features/{v}.npy"
         a = np.load(clip_path)
         embedding_dict[v] = {}
         for i, k in enumerate(video_keyframe_dict[v]):
@@ -70,10 +70,10 @@ def main():
     # Build the faiss index
     index = faiss.IndexFlatL2(embedding_array.shape[1])
     index.add(embedding_array)
-    faiss.write_index(index, "./test_datasets/embedding.index")
+    faiss.write_index(index, "./datasets/embedding.index")
 
     # Save info_array into a npy file
-    np.save("./test_datasets/clip-features-vit-b32-sample/info.npy", info_array)
+    np.save("./datasets/info.npy", info_array)
     
 
 if __name__ == "__main__":
