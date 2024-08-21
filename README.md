@@ -17,6 +17,10 @@ pip install git+https://github.com/chroma-core/chroma.git
 pip install streamlit faiss-cpu open-clip-torch
 ```
 
+## Adding new dependencies
+
+recommend using https://pypi.org/project/pip-tools/
+
 ## Sample Dataset
 
 Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./datasets` directory.

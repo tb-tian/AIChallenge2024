@@ -3,12 +3,12 @@ from PIL import Image
 
 
 if __name__ == "__main__":
-    v = VectorDB()
+    vecdb = VectorDB()
     query = input("Your query term: ")
-    res = v.search_text(query)
+    res = vecdb.search_text(query)
 
-    for v, k, similarity in res:
-        file_path = f"./datasets/keyframes/{v}/{k}.jpg"
+    for video, keyframe, similarity in res:
+        file_path = f"./datasets/keyframes/{video}/{keyframe}.jpg"
         image = Image.open(file_path)
         image.show()
-        print(f"Video: {v}, Keyframe: {k}, Similarity: {similarity}")
+        print(f"Video: {video}, Keyframe: {keyframe}, Similarity: {similarity}")

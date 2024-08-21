@@ -30,14 +30,11 @@ class VectorDB:
         )
         distances, indices = self.index.search(query_embedding, limit)
 
-        # Retrieve the top 5 most suitable to the query
-        top_5 = [
+        # tuple of (video, keyframe, similarity)
+        result = [
             (self.embedding_info[idx][0], self.embedding_info[idx][1], dist)
             for dist, idx in zip(distances[0], indices[0])
         ]
-
-        # Print all the image that is suitable
-
-        if not top_5:
+        if not result:
             print("nothing found")
-        return top_5
+        return result

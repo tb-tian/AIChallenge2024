@@ -45,23 +45,23 @@ if __name__ == "__main__":
         file_path = f"./datasets/keyframes/{v}/{k}.jpg"
         if i % 4 == 0:
             with col1:
-                st.image(file_path, width=WIDTH)
+                st.image(file_path, caption=similarity, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
                     video_dialog(v)
         elif i % 4 == 1:
             with col2:
-                st.image(file_path, width=WIDTH)
+                st.image(file_path, caption=similarity, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
                     video_dialog(v)
 
         elif i % 4 == 2:
             with col3:
-                st.image(file_path, width=WIDTH)
+                st.image(file_path, caption=similarity, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
                     video_dialog(v)
 
         else:
             with col4:
-                st.image(file_path, width=WIDTH)
+                st.image(file_path, caption=similarity, width=WIDTH)
                 if st.button(f"view {v}/{k}"):
                     video_dialog(v)
