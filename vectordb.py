@@ -1,7 +1,7 @@
 import time
 from typing import Tuple
 import numpy as np
-import clip
+import open_clip
 import torch
 import faiss
 
@@ -11,9 +11,9 @@ class VectorDB:
         start_time = time.time()
         
         # clip model setup
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model, preprocess = clip.load("ViT-B/32", self.device)
-
+        self.model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
+        self.model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
+        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
         # Load the indexing database and embedding info
         self.index = faiss.read_index("./datasets/embedding.index")
         self.embedding_info = np.load("./datasets/info.npy")
@@ -21,8 +21,7 @@ class VectorDB:
         print(f"loaded vectordb in {time.time()-start_time}s")
 
     def search_text(self, user_query, limit=10) -> Tuple:
-        query = clip.tokenize(user_query).to(self.device)
-        query_feature = self.model.encode_text(query)
+        query_feature = self.model.encode_text(self.tokenizer(user_query))
 
         # Query the faiss index to find the nearest neighbors
         query_embedding = (
