@@ -1,61 +1,22 @@
 import time
 from typing import Tuple
-import streamlit as st
 import numpy as np
 import clip
 import torch
-from glob import glob
 import faiss
 
 
 class VectorDB:
     def __init__(self):
         start_time = time.time()
+        
         # clip model setup
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model, preprocess = clip.load("ViT-B/32", self.device)
 
-        # Create an array of keyframe and video. Remember to change the path that suitable to local machine
-        all_keyframe = glob("./datasets/keyframes/*/*.jpg")
-        video_keyframe_dict = {}
-        all_video = glob("./datasets/keyframes/*")
-        all_video = [v.rsplit("/", 1)[-1] for v in all_video]
-        all_video = sorted(all_video)
-
-        print(f"loaded {len(all_keyframe)} keyframes")
-        print(f"loaded {len(all_video)} videos")
-
-        for kf in all_keyframe:
-            _, vid, kf = kf[:-4].rsplit("/", 2)
-            if vid not in video_keyframe_dict.keys():
-                video_keyframe_dict[vid] = [kf]
-            else:
-                video_keyframe_dict[vid].append(kf)
-
-        for v, k in video_keyframe_dict.items():
-            video_keyframe_dict[v] = sorted(k)
-
-        # Load clip feature into an dictionary of numpy arrays
-        embedding_dict = {}
-        for v in all_video:
-            clip_path = f"./datasets/clip-features-vit-b32-sample/clip-features/{v}.npy"
-            a = np.load(clip_path)
-            embedding_dict[v] = {}
-            for i, k in enumerate(video_keyframe_dict[v]):
-                embedding_dict[v][k] = a[i]
-
-        # Flatten the embeddings and store them in a list along with their corresponding video and keyframe identifiers
-        embedding_list = []
-        self.embedding_info = []
-        for v in all_video:
-            for k in video_keyframe_dict[v]:
-                embedding_list.append(embedding_dict[v][k])
-                self.embedding_info.append((v, k))
-        embedding_array = np.array(embedding_list)
-
-        # Build the faiss index
-        self.index = faiss.IndexFlatL2(embedding_array.shape[1])
-        self.index.add(embedding_array)
+        # Load the indexing database and embedding info
+        self.index = faiss.read_index("./datasets/embedding.index")
+        self.embedding_info = np.load("./datasets/info.npy")
 
         print(f"loaded vectordb in {time.time()-start_time}s")
 
