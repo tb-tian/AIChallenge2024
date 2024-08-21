@@ -46,12 +46,12 @@ def main():
             keyframe_path = f"./datasets/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
-        np.save(f"./datasets/clip-features-vit-b32-sample/clip-features/{v}.npy",keyframe_array)
+        np.save(f"./datasets/clip-features/{v}.npy",keyframe_array)
 
     # Load clip feature into an dictionary of numpy arrays
     embedding_dict = {}
     for v in all_video:
-        clip_path = f"./datasets/clip-features-vit-b32-sample/clip-features/{v}.npy"
+        clip_path = f"./datasets/clip-features/{v}.npy"
         a = np.load(clip_path)
         embedding_dict[v] = {}
         for i, k in enumerate(video_keyframe_dict[v]):

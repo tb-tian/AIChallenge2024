@@ -13,8 +13,8 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly
 
 ```bash
 pip install git+https://github.com/openai/CLIP.git
-pip install git+git+https://github.com/chroma-core/chroma.git
-pip install streamlit faiss-cpu
+pip install git+https://github.com/chroma-core/chroma.git
+pip install streamlit faiss-cpu open-clip-torch
 ```
 
 ## Sample Dataset
@@ -32,24 +32,30 @@ your projects structure should look like this
 
 ```
 .
-├── compute.py
+├── cli.py
 ├── datasets
-│   ├── AIC-2023-Baseline-v1.ipynb
-│   ├── clip-features-vit-b32-sample
-│   ├── clip-features-vit-b32-sample.zip
+│   ├── clip-features
 │   ├── keyframes
-│   ├── Keyframes_L01.zip
-│   ├── map-keyframes-sample
-│   └── map-keyframes-sample.zip
+│   ├── map-keyframes
+│   ├── videos
+│   ├── info.npy (created after running embedding.py)
+│   ├── embedding.index (created after running embedding.py)
+│   └── ...
 ├── README.md
+├── embedding.py
 ├── requirements.txt
-├── user_interface.py
+├── web_app.py
 └── vectordb.py
 
 ```
 
 
 ## Usage
+
+Running embedding.py first
+```bash
+python embedding.py
+```
 
 Testing UI
 ```bash
