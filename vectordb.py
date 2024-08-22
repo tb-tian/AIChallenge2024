@@ -2,7 +2,6 @@ import time
 from typing import Tuple
 import numpy as np
 import open_clip
-import torch
 import faiss
 
 
@@ -11,9 +10,11 @@ class VectorDB:
         start_time = time.time()
 
         # clip model setup
-        self.model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
+        self.model, _, preprocess = open_clip.create_model_and_transforms(
+            "ViT-B-32", pretrained="openai"
+        )
         self.model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
-        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
+        self.tokenizer = open_clip.get_tokenizer("ViT-B-32")
         # Load the indexing database and embedding info
         self.index = faiss.read_index("./datasets/embedding.index")
         self.embedding_info = np.load("./datasets/info.npy")

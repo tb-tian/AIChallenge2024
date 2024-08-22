@@ -4,3 +4,8 @@ torch
 faiss-cpu
 open_clip_torch
 openai-whisper
+transformers[torch]
+
+# dev tools 
+black
+
