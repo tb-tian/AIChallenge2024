@@ -5,6 +5,11 @@ faiss-cpu
 open_clip_torch
 openai-whisper
 transformers[torch]
+SpeechRecognition
+pydub
+librosa
+easynmt
+openai-whisper
 
 # dev tools 
 black
