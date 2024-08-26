@@ -10,7 +10,9 @@ pydub
 librosa
 easynmt
 openai-whisper
+soundfile
 
 # dev tools 
 black
 
+    
