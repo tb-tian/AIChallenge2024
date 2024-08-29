@@ -18,7 +18,7 @@ def translate(video):
 
     with open(en_text, "a") as file:
         for line in lines:
-            file.write(translate_model.translate(line, target_lang="en") + "\n")
+            file.write(translate_model.translate(line, target_lang="en"))
 
 
 if __name__ == "__main__":
