@@ -51,7 +51,7 @@ def process_video(video_path):
         hop_size=10,
         max_sil_kept=400,
     )
-    chunks = slicer.slice(audio)
+    chunks = slicer.slice(audio,video_path)
 
     video_name = os.path.basename(video_path)[:-4]
     output_dir = "./datasets/texts"
