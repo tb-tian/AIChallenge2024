@@ -41,27 +41,41 @@ your projects structure should look like this
 │   ├── clip-features
 │   ├── keyframes
 │   ├── map-keyframes
+│   ├── texts (created for storing vietnamese and english translation)
+│   ├── timestamps (created for storing sound chunk)
 │   ├── videos
-│   ├── info.npy (created after running embedding.py)
-│   ├── embedding.index (created after running embedding.py)
+│   ├── info.npy (created after running keyframe_embedding.py)
+│   ├── embedding.index (created after running keyframe_embedding.py)
 │   └── ...
 ├── README.md
-├── embedding.py
+├── document_embedding.py
+├── keyframe_embedding.py
+├── loading_dict.py
+├── requirements.in
 ├── requirements.txt
-├── web_app.py
-└── vectordb.py
+├── slicer.py
+├── speech_to_text.py
+├── translation.py
+├── vectordb.py
+├── video_processing.py
+└── web_app.py
 
 ```
 
 
 ## Usage
 
-Running embedding.py first
+Using speech_to_text function
 ```bash
-python embedding.py
+python video_processing.py
 ```
 
-Testing UI
+Running embedding keyframe
+```bash
+python keyframe_embedding.py
+```
+
+Openning UI
 ```bash
 streamlit run web_app.py
 ```

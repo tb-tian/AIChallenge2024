@@ -1,6 +1,6 @@
+from loading_dict import create_video_list_and_video_keyframe_dict
 from speech_to_text import process_video
 from translation import translate
-from loading_dict import create_video_list_and_video_keyframe_dict
 
 if __name__ == "__main__":
     """

@@ -6,11 +6,10 @@ import librosa
 import soundfile
 import whisper
 
-from slicer import Slicer
 from loading_dict import create_video_list_and_video_keyframe_dict
+from slicer import Slicer
 
 whisper_model = whisper.load_model("large")
-
 
 
 def extract_audio_from_video(video_path, audio_path):
@@ -73,6 +72,3 @@ def process_video(video_path):
         os.remove(chunk_path)
 
     os.remove(audio_path)
-
-
-
