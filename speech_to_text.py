@@ -5,12 +5,12 @@ import subprocess
 import librosa
 import soundfile
 import whisper
-from easynmt import EasyNMT
 
 from slicer import Slicer
+from loading_dict import create_video_list_and_video_keyframe_dict
 
 whisper_model = whisper.load_model("large")
-translate_model = EasyNMT("m2m_100_418M")
+
 
 
 def extract_audio_from_video(video_path, audio_path):
@@ -37,7 +37,7 @@ def recognize_speech_from_audio(audio_path):
     return text
 
 
-def process_video(video_path, initialdir):
+def process_video(video_path):
     """
     Processes a video file to extract audio and recognize speech.
     """
@@ -70,17 +70,9 @@ def process_video(video_path, initialdir):
         with codecs.open(f"{output_dir}/{video_name}_vi.txt", "a", "utf-8") as f:
             f.write(text + "\n")
 
-        with codecs.open(f"{output_dir}/{video_name}_en.txt", "a", "utf-8") as f:
-            f.write(translate_model.translate(text, target_lang="en") + "\n")
-
         os.remove(chunk_path)
 
     os.remove(audio_path)
 
 
-# Usage
-if __name__ == "__main__":
-    initialdir = os.getcwd()
-    video_path = "./datasets/videos/L01_V001.mp4"
-    # video_path = "test.mp4"
-    process_video(video_path, initialdir)
+
