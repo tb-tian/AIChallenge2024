@@ -171,7 +171,7 @@ class Slicer:
         if len(sil_tags) == 0:
             idk = open(f"{timestamp_path}.txt", "w+")
             idk.write("start_time,end_time\n")
-            idk.write("0-" + str(sil_tags[0][0])[:-2] + "\n")
+            idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
             for i in range(len(sil_tags) - 1):
                 idk.write(
                     str(sil_tags[i][1])[:-2] + "," + str(sil_tags[i + 1][0])[:-2] + "\n"
@@ -192,7 +192,7 @@ class Slicer:
 
             idk = open(f"{timestamp_path}.txt", "w+")
             idk.write("start_time,end_time\n")
-            idk.write("0-" + str(sil_tags[0][0])[:-2] + "\n")
+            idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
             for i in range(len(sil_tags) - 1):
                 idk.write(
                     str(sil_tags[i][1])[:-2] + "," + str(sil_tags[i + 1][0])[:-2] + "\n"
