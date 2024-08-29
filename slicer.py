@@ -167,7 +167,7 @@ class Slicer:
             sil_tags.append((pos, total_frames + 1))
         # Apply and return slices.
         vid_name = os.path.basename(video_path)[:-4]
-        timestamp_path = "./datasets/timestamp/" + vid_name
+        timestamp_path = "./datasets/timestamps/" + vid_name
         if len(sil_tags) == 0:
             idk = open(f"{timestamp_path}.txt", "w+")
             idk.write("start_time,end_time\n")

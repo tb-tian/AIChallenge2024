@@ -8,6 +8,6 @@ if __name__ == "__main__":
     """
     all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
     for v in all_video:
-        video_path = "./datasets/videos/{v}.mp4"
+        video_path = f"./datasets/videos/{v}.mp4"
         process_video(video_path)
         translate(v)
