@@ -74,8 +74,9 @@ python cli.py
 
 # Coding style
 
-PEP-8 with black formatter 
+PEP-8 with black formatter and isort
 
 ```
 black .
+isort .
 ```

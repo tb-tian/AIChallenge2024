@@ -1,16 +1,16 @@
-import speech_recognition as srr
-import subprocess
+import codecs
 import os
-import numpy as np
+import subprocess
+
 import librosa
 import soundfile
-from slicer import Slicer
-import codecs
-from easynmt import EasyNMT
 import whisper
+from easynmt import EasyNMT
 
-recognizer = whisper.load_model("large")
-model = EasyNMT("m2m_100_418M")
+from slicer import Slicer
+
+whisper_model = whisper.load_model("large")
+translate_model = EasyNMT("m2m_100_418M")
 
 
 def extract_audio_from_video(video_path, audio_path):
@@ -25,7 +25,7 @@ def recognize_speech_from_audio(audio_path):
     """
     Recognizes speech from an audio file using the whisper library.
     """
-    transcript = recognizer.transcribe(
+    transcript = whisper_model.transcribe(
         word_timestamps=True,
         audio=audio_path,
         fp16=False,
@@ -71,7 +71,7 @@ def process_video(video_path, initialdir):
             f.write(text + "\n")
 
         with codecs.open(f"{output_dir}/{video_name}_en.txt", "a", "utf-8") as f:
-            f.write(model.translate(text, target_lang="en") + "\n")
+            f.write(translate_model.translate(text, target_lang="en") + "\n")
 
         os.remove(chunk_path)
 

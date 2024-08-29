@@ -1,6 +1,6 @@
-from vectordb import VectorDB
 from PIL import Image
 
+from vectordb import VectorDB
 
 if __name__ == "__main__":
     vecdb = VectorDB()

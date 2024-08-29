@@ -1,10 +1,11 @@
-import torch
-from PIL import Image
+import time
+from glob import glob
+
+import faiss
 import numpy as np
 import open_clip
-from glob import glob
-import time
-import faiss
+import torch
+from PIL import Image
 from tqdm import tqdm
 
 model, _, preprocess = open_clip.create_model_and_transforms(

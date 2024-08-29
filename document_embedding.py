@@ -1,7 +1,6 @@
-import torch
-import open_clip
 import faiss
 import numpy as np
+import open_clip
 
 model, _, preprocess = open_clip.create_model_and_transforms(
     "ViT-B-32", pretrained="openai"
@@ -9,16 +8,18 @@ model, _, preprocess = open_clip.create_model_and_transforms(
 model.eval()
 tokenizer = open_clip.get_tokenizer("ViT-B-32")
 
+
 def embedding(text):
     text_feat = model.encode_text(tokenizer(text))
-    text_embedding = text_feat.detach().numpy().reshape(1,-1).astype("float32")
+    text_embedding = text_feat.detach().numpy().reshape(1, -1).astype("float32")
     return text_embedding
+
 
 doc_path = "./datasets/texts/L01_V001_en.txt"
 embedding_list = []
 line_list = []
 
-with open(doc_path, 'r') as file:
+with open(doc_path, "r") as file:
     for i, line in enumerate(file):
         line_list.append(line)
         embedding_list.append(embedding(line))
@@ -29,9 +30,7 @@ query = "Art exhibition"
 query_feature = model.encode_text(tokenizer(query))
 
 # Query the faiss index to find the nearest neighbors
-query_embedding = (
-    query_feature.detach().numpy().reshape(1, -1).astype("float32")
-)
+query_embedding = query_feature.detach().numpy().reshape(1, -1).astype("float32")
 
 # Build the faiss index
 index = faiss.IndexFlatL2(embedding_array.shape[1])
