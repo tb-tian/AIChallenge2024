@@ -169,7 +169,7 @@ class Slicer:
         vid_name = os.path.basename(video_path)[:-4]
         timestamp_path = "./datasets/timestamps/" + vid_name
         if len(sil_tags) == 0:
-            idk = open(f"{timestamp_path}.txt", "w+")
+            idk = open(f"{timestamp_path}.csv", "w+")
             idk.write("start_time,end_time\n")
             idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
             for i in range(len(sil_tags) - 1):
@@ -190,7 +190,7 @@ class Slicer:
                     self._apply_slice(waveform, sil_tags[-1][1], total_frames)
                 )
 
-            idk = open(f"{timestamp_path}.txt", "w+")
+            idk = open(f"{timestamp_path}.csv", "w+")
             idk.write("start_time,end_time\n")
             idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
             for i in range(len(sil_tags) - 1):

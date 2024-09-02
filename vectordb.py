@@ -5,6 +5,7 @@ import faiss
 import numpy as np
 import open_clip
 
+from hybrid_search import query
 
 class VectorDB:
     def __init__(self):
@@ -22,20 +23,9 @@ class VectorDB:
 
         print(f"loaded vectordb in {time.time()-start_time}s")
 
-    def search_text(self, user_query, limit=10) -> Tuple:
-        query_feature = self.model.encode_text(self.tokenizer(user_query))
-
-        # Query the faiss index to find the nearest neighbors
-        query_embedding = (
-            query_feature.detach().numpy().reshape(1, -1).astype("float32")
-        )
-        distances, indices = self.index.search(query_embedding, limit)
-
-        # tuple of (video, keyframe, similarity)
-        result = [
-            (self.embedding_info[idx][0], self.embedding_info[idx][1], dist)
-            for dist, idx in zip(distances[0], indices[0])
-        ]
+    def search_text(self, user_query, limit=50) -> Tuple:
+        
+        result = query(user_query, limit)
         if not result:
             print("nothing found")
         return result
