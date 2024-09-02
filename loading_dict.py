@@ -7,8 +7,8 @@ def create_video_list_and_video_keyframe_dict():
     """
     all_keyframe = glob("./datasets/keyframes/*/*.jpg")
     video_keyframe_dict = {}
-    all_video = glob("./datasets/keyframes/*")
-    all_video = [v.rsplit("/", 1)[-1] for v in all_video]
+    all_video = glob("./datasets/videos/*")
+    all_video = [v.rsplit("/", 1)[-1][:-4] for v in all_video]
     all_video = sorted(all_video)
 
     print(f"loaded {len(all_keyframe)} keyframes")
