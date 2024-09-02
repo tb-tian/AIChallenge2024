@@ -121,7 +121,7 @@ def query(query, limit):
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
-            rerank.append((v, kf, 1/ranked_kf_dic[v][kf] + 1/ranked_doc_dic[v][kf]))
+            rerank.append((v, kf, 0.7/ranked_kf_dic[v][kf] + 0.3/ranked_doc_dic[v][kf]))
             # rerank.append((v, kf, ranked_kf_dic[v][kf]))
     
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)
