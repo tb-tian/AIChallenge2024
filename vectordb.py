@@ -7,6 +7,7 @@ import open_clip
 
 from hybrid_search import query
 
+
 class VectorDB:
     def __init__(self):
         start_time = time.time()
@@ -24,7 +25,7 @@ class VectorDB:
         print(f"loaded vectordb in {time.time()-start_time}s")
 
     def search_text(self, user_query, limit=50) -> Tuple:
-        
+
         result = query(user_query, limit)
         if not result:
             print("nothing found")

@@ -1,20 +1,23 @@
 import csv
 
 import faiss
+import joblib
 import numpy as np
 import open_clip
+import pandas as pd
+from PIL import Image
 from scipy.sparse import load_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
-from PIL import Image
-import joblib
+
 from loading_dict import create_video_list_and_video_keyframe_dict
-import pandas as pd
+
 all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
 
+
 def keyframe_querying(query):
-    
+
     model, _, preprocess = open_clip.create_model_and_transforms(
         "ViT-B-32", pretrained="openai"
     )
@@ -30,9 +33,8 @@ def keyframe_querying(query):
     embedding_info = np.load("./datasets/info.npy")
 
     print(f"loaded {keyframe_embeddings.size} keyframes")
-    
+
     keyframe_embeddings = normalize(keyframe_embeddings, axis=1)
-    
 
     # Embedding and query the faiss index to find the nearest keyframe
     query_feature = model.encode_text(tokenizer(query))
@@ -44,21 +46,22 @@ def keyframe_querying(query):
         (embedding_info[idx][0], embedding_info[idx][1], dist)
         for dist, idx in zip(distances[0], indices[0])
     ]
-    
+
     result = {}
-    for (video, kf, dist) in distance_array:
+    for video, kf, dist in distance_array:
         if video not in result:
             result[video] = {}
         result[video][kf] = dist
     return result
-    
+
+
 def document_querying(query):
 
     # Load the data
-    tfidf_matrix = load_npz('./datasets/tfidf_matrix.npz')
-    vectorizer = joblib.load('./datasets/tfidf_vectorizer.pkl')
-    embedding_info = joblib.load('./datasets/document_embedding_info.pkl')
-    mapping_df = pd.read_csv('./datasets/mapping.csv', dtype={'keyframe': str})
+    tfidf_matrix = load_npz("./datasets/tfidf_matrix.npz")
+    vectorizer = joblib.load("./datasets/tfidf_vectorizer.pkl")
+    embedding_info = joblib.load("./datasets/document_embedding_info.pkl")
+    mapping_df = pd.read_csv("./datasets/mapping.csv", dtype={"keyframe": str})
 
     print(f"loaded {tfidf_matrix.shape} documents")
 
@@ -67,13 +70,14 @@ def document_querying(query):
     # Compute cosine similarity between the query and the documents
     cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
 
-
     result = {}
     for idx, score in enumerate(cosine_similarities):
         video, chunk = embedding_info[idx]
-        
-        mapping_row = mapping_df[(mapping_df['video'] == video) & (mapping_df['chunk'] == chunk)]
-        for kf in mapping_row['keyframe']:
+
+        mapping_row = mapping_df[
+            (mapping_df["video"] == video) & (mapping_df["chunk"] == chunk)
+        ]
+        for kf in mapping_row["keyframe"]:
             if video not in result:
                 result[video] = {}
             result[video][kf] = score
@@ -81,15 +85,22 @@ def document_querying(query):
             #     print(video, kf)
 
     return result
-    
+
+
 def sort_results(result):
     # Flatten the nested dictionary into a list of tuples
-    flattened_results = [(video, kf, score) for video in result for kf, score in result[video].items()]
+    flattened_results = [
+        (video, kf, score) for video in result for kf, score in result[video].items()
+    ]
     # Sort the list of tuples based on the score in descending order
     sorted_results = sorted(flattened_results, key=lambda x: x[2], reverse=True)
     # Include rank in the sorted results
-    ranked_results = [(len(sorted_results) - rank + 1, video, kf, score) for rank, (video, kf, score) in enumerate(sorted_results)]
+    ranked_results = [
+        (len(sorted_results) - rank + 1, video, kf, score)
+        for rank, (video, kf, score) in enumerate(sorted_results)
+    ]
     return ranked_results
+
 
 def query(query, limit):
     kf_res = keyframe_querying(query)
@@ -121,18 +132,21 @@ def query(query, limit):
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
-            rerank.append((v, kf, 0.7/ranked_kf_dic[v][kf] + 0.3/ranked_doc_dic[v][kf]))
+            rerank.append(
+                (v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf])
+            )
             # rerank.append((v, kf, ranked_kf_dic[v][kf]))
-    
+
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)
     rerank = rerank[:limit]
-    for (video, kf, score) in rerank:
+    for video, kf, score in rerank:
         pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
         # image = Image.open(pic_img)
         # image.show()
         # print(f"Video: {video}, Keyframe: {kf}, Score: {score}")
-    
+
     return rerank
+
 
 if __name__ == "__main__":
     query("car", 50)

@@ -44,12 +44,12 @@ your projects structure should look like this
 │   ├── texts (created for storing vietnamese and english translation)
 │   ├── timestamps (created for storing sound chunk)
 │   ├── videos
-│   └── document_embedding_info.pkl (created after running document_embedding.py)
+│   ├── document_embedding_info.pkl (created after running document_embedding.py)
 │   ├── info.npy (created after running keyframe_embedding.py)
 │   ├── embedding.index (created after running keyframe_embedding.py)
-│   └── mapping.csv (created after running mapping.py)
-│   └── tfidf_matrix.npz (created after running document_embedding.py)
-│   └── tfidf_vectorizer.pkl (created after running document_embedding.py)
+│   ├── mapping.csv (created after running mapping.py)
+│   ├── tfidf_matrix.npz (created after running document_embedding.py)
+│   ├── tfidf_vectorizer.pkl (created after running document_embedding.py)
 │   └── ...
 ├── README.md
 ├── document_embedding.py

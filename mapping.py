@@ -1,9 +1,10 @@
 import csv
-
-from loading_dict import create_video_list_and_video_keyframe_dict
 import os
 
+from loading_dict import create_video_list_and_video_keyframe_dict
+
 all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+
 
 def mapping_from_keyframe_to_chunk(
     video,
@@ -44,26 +45,26 @@ def mapping_from_keyframe_to_chunk(
                         video_keyframe_dict[video][int(n) - 1]
                     ] = (i - 1)
                     break
-                
+
     os.remove(mapping_path)
     return video_keyframe_chunk_dict
 
 
 def main():
     map_path = f"./datasets/mapping.csv"
-    with open(map_path, 'w') as file:
+    with open(map_path, "w") as file:
         file = csv.writer(file)
-        file.writerow(["video","keyframe","chunk"])
+        file.writerow(["video", "keyframe", "chunk"])
         for v in all_video:
             video_keyframe_chunk_dict = mapping_from_keyframe_to_chunk(v)
             for kf in video_keyframe_dict[v]:
                 chunk = video_keyframe_chunk_dict[v].get(kf)
                 if chunk is not None:
-                    file.writerow([v,kf,chunk])
+                    file.writerow([v, kf, chunk])
                     prev_chunk = chunk
                 else:
-                    file.writerow([v,kf,prev_chunk])
-    
+                    file.writerow([v, kf, prev_chunk])
+
 
 if __name__ == "__main__":
     main()
