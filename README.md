@@ -44,8 +44,12 @@ your projects structure should look like this
 │   ├── texts (created for storing vietnamese and english translation)
 │   ├── timestamps (created for storing sound chunk)
 │   ├── videos
+│   └── document_embedding_info.pkl (created after running document_embedding.py)
 │   ├── info.npy (created after running keyframe_embedding.py)
 │   ├── embedding.index (created after running keyframe_embedding.py)
+│   └── mapping.csv (created after running mapping.py)
+│   └── tfidf_matrix.npz (created after running document_embedding.py)
+│   └── tfidf_vectorizer.pkl (created after running document_embedding.py)
 │   └── ...
 ├── README.md
 ├── document_embedding.py
@@ -65,15 +69,27 @@ your projects structure should look like this
 
 ## Usage
 
-Using speech_to_text function
+### Indexing Stage
+
+Step 1: Preparing projects structure as above
+
+Step 2: Run video_processing.py
 ```bash
 python video_processing.py
 ```
 
-Running embedding keyframe
+Step 3: Run document_embedding.py and keyframe_embedding.py
 ```bash
+python document_embedding.py 
 python keyframe_embedding.py
 ```
+
+Step 4: Run mapping.py
+```bash
+python mapping.py
+```
+
+### Retrieval Stage
 
 Openning UI
 ```bash
