@@ -52,6 +52,7 @@ your projects structure should look like this
 │   ├── tfidf_matrix.npz (created after running document_embedding.py)
 │   ├── tfidf_vectorizer.pkl (created after running document_embedding.py)
 │   └── ...
+├── transnetv2-weights (weight for transnetv2 model)
 ├── README.md
 ├── document_embedding.py
 ├── keyframe_embedding.py
