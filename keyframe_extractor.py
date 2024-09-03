@@ -51,8 +51,8 @@ def keyframe_extractor():
     for v in all_video:
         file_path = f"./datasets/preprocessing/{v}_scenes.txt"
         video_path = f"./datasets/videos/{v}.mp4"
-        kf_path = f"./datasets/new-keyframes/{v}"
-        map_path = f"./datasets/new-map-keyframes/{v}.csv"
+        kf_path = f"./datasets/keyframes/{v}"
+        map_path = f"./datasets/map-keyframes/{v}.csv"
 
         cap = cv2.VideoCapture(video_path)
         os.mkdir(kf_path)
@@ -67,7 +67,7 @@ def keyframe_extractor():
                 cap.set(cv2.CAP_PROP_POS_FRAMES, mid)
                 ret, frame = cap.read()
                 if ret:
-                    keyframe_path = f"./datasets/new-keyframes/{v}/{i:04}.jpg"
+                    keyframe_path = f"./datasets/keyframes/{v}/{i+1:04}.jpg"
                     cv2.imwrite(keyframe_path, frame)
                     fps = cap.get(cv2.CAP_PROP_FPS)
                     mapping.writerow([i + 1, mid / fps, fps, mid])
@@ -80,5 +80,5 @@ def keyframe_extractor():
 
 
 if __name__ == "__main__":
-    # segmentation()
+    segmentation()
     keyframe_extractor()

@@ -42,9 +42,10 @@ def keyframe_querying(query):
     query_embedding = normalize(query_embedding, axis=1)
     limit = keyframe_index.ntotal
     distances, indices = keyframe_index.search(query_embedding, limit)
+    similarity_scores = 1 / (distances + 1e-8) 
     distance_array = [
         (embedding_info[idx][0], embedding_info[idx][1], dist)
-        for dist, idx in zip(distances[0], indices[0])
+        for dist, idx in zip(similarity_scores[0], indices[0])
     ]
 
     result = {}
@@ -96,7 +97,7 @@ def sort_results(result):
     sorted_results = sorted(flattened_results, key=lambda x: x[2], reverse=True)
     # Include rank in the sorted results
     ranked_results = [
-        (len(sorted_results) - rank, video, kf, score)
+        (rank + 1, video, kf, score)
         for rank, (video, kf, score) in enumerate(sorted_results)
     ]
     return ranked_results
@@ -115,7 +116,11 @@ def query(query, limit):
         if video not in ranked_kf_dic:
             ranked_kf_dic[video] = {}
         ranked_kf_dic[video][kf] = rank
-        # print(f"Rank: {rank}, Video: {video}, Keyframe: {kf}, Score: {score}")
+        # if rank in range(1, 10):
+        #     print(f"Rank: {rank}, Video: {video}, Keyframe: {kf}, Score: {score}")
+        #     pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
+        #     image = Image.open(pic_img)
+        #     image.show()
 
     ranked_doc_dic = {}
     # print("\nSorted Document Results:")

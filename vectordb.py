@@ -25,9 +25,8 @@ class VectorDB:
         print(f"loaded vectordb in {time.time()-start_time}s")
 
     def search_text(self, user_query, limit=100) -> Tuple:
-
         result = query(user_query, limit)
-        
+
         if not result:
             print("nothing found")
         return result
