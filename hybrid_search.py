@@ -96,7 +96,7 @@ def sort_results(result):
     sorted_results = sorted(flattened_results, key=lambda x: x[2], reverse=True)
     # Include rank in the sorted results
     ranked_results = [
-        (len(sorted_results) - rank + 1, video, kf, score)
+        (len(sorted_results) - rank, video, kf, score)
         for rank, (video, kf, score) in enumerate(sorted_results)
     ]
     return ranked_results
@@ -132,21 +132,19 @@ def query(query, limit):
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
-            rerank.append(
-                (v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf])
-            )
-            # rerank.append((v, kf, ranked_kf_dic[v][kf]))
+            rerank.append((v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf]))
+            # rerank.append((v, kf, kf_res[v][kf]))
 
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)
     rerank = rerank[:limit]
-    for video, kf, score in rerank:
-        pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
-        # image = Image.open(pic_img)
-        # image.show()
-        # print(f"Video: {video}, Keyframe: {kf}, Score: {score}")
+    # for video, kf, score in rerank:
+    #     pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
+    #     image = Image.open(pic_img)
+    #     image.show()
+    #     print(f"Video: {video}, Keyframe: {kf}, Score: {score}")
 
     return rerank
 
 
 if __name__ == "__main__":
-    query("car", 50)
+    query("car", 10)

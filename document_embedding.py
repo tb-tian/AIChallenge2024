@@ -64,5 +64,5 @@ def querying(query):
 
 if __name__ == "__main__":
     embedding()
-    query = "a World Cup cream cake"
-    querying(query)
+    # query = "a World Cup cream cake"
+    # querying(query)
