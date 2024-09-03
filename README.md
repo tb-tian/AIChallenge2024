@@ -41,6 +41,7 @@ your projects structure should look like this
 │   ├── clip-features
 │   ├── keyframes
 │   ├── map-keyframes
+│   ├── preprocessing (created for storing keyframe segments)
 │   ├── texts (created for storing vietnamese and english translation)
 │   ├── timestamps (created for storing sound chunk)
 │   ├── videos
@@ -71,27 +72,38 @@ your projects structure should look like this
 
 ### Indexing Stage
 
-Step 1: Preparing projects structure as above
+**Step 1**: Prepare the project structure as shown above and ensure you have the videos downloaded.
 
-Step 2: Run video_processing.py
+**Step 2**: Run [video_processing.py](./video_processing.py). This process may take a significant amount of time.
 ```bash
 python video_processing.py
 ```
+Then, you will have vietnamese and english dialogue in [timestamps](./datasets/timestamps/) folder.
 
-Step 3: Run document_embedding.py and keyframe_embedding.py
+**Step 3**: Run [keyframe_extractor.py](./keyframe_extractor.py). This process will
+1. extract keyframe from the video and store them in `keyframes`
+2. create a file csv of frame index in `map-keyframes` folder.
+```bash
+python keyframe_extractor.py
+```
+
+
+**Step 4**: Run [document_embedding.py](./document_embedding.py) and [keyframe_embedding.py](./keyframe_embedding.py)
 ```bash
 python document_embedding.py 
 python keyframe_embedding.py
 ```
 
-Step 4: Run mapping.py
+
+**Step 5**: Run [mapping.py](./mapping.py). This process will create `mapping.csv` to map each keyframe to the corresponding chunk of dialogue.
+
 ```bash
 python mapping.py
 ```
 
 ### Retrieval Stage
 
-Openning UI
+Running the web_app version
 ```bash
 streamlit run web_app.py
 ```
