@@ -12,6 +12,7 @@ easynmt
 openai-whisper
 soundfile
 tensorflow
+opencv-python
 
 # dev tools 
 black

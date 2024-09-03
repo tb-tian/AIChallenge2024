@@ -160,6 +160,7 @@ numpy==1.26.4
     #   ml-dtypes
     #   numba
     #   openai-whisper
+    #   opencv-python
     #   opt-einsum
     #   pandas
     #   pyarrow
@@ -206,6 +207,8 @@ nvidia-nvtx-cu12==12.1.105
 open-clip-torch==2.26.1
     # via -r requirements.in
 openai-whisper==20230306
+    # via -r requirements.in
+opencv-python==4.10.0.84
     # via -r requirements.in
 opt-einsum==3.3.0
     # via tensorflow
