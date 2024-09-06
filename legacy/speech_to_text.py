@@ -13,7 +13,6 @@ from load_all_video_keyframes_info import load_all_video_keyframes_info
 from slicer import Slicer
 
 whisper_model = whisper.load_model("large")
-# whisper_model = whisper.load_model("tiny")
 
 logger = get_logger()
 

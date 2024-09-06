@@ -2,27 +2,31 @@ import codecs
 import os
 import subprocess
 
+import whisperx
 from tqdm import tqdm
 
 import helpers
 from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
-import whisperx
 
 logger = get_logger()
 
 device = "cuda"
-# audio_file = "audio.mp3"
-batch_size = 16 # reduce if low on GPU mem
-compute_type = "float16" # change to "int8" if low on GPU mem (may reduce accuracy)
-whisperx_model = whisperx.load_model("large-v2", device, compute_type=compute_type, language="vi")
+batch_size = 16  # reduce if low on GPU mem
+compute_type = "float16"
+whisperx_model = whisperx.load_model(
+    "large-v2", device, compute_type=compute_type, language="vi"
+)
+
 
 def whisperx_speech_to_text(audio_path, video_path, transcript_path):
     audio = whisperx.load_audio(audio_path)
-    result = whisperx_model.transcribe(audio, batch_size=batch_size, print_progress=True)
+    result = whisperx_model.transcribe(
+        audio, batch_size=batch_size, print_progress=True
+    )
     # print(result["segments"])  # before alignment
-    text = ""
 
+    text = ""
     vid_name = os.path.basename(video_path)[:-4]
     with open(f"./data-staging/audio-chunk-timestamps/{vid_name}.csv", "w") as ts_file:
         ts_file.write("start_time,end_time\n")

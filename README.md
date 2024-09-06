@@ -1,20 +1,9 @@
 ## Installation
 
-### For Ubuntu
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly recommend using python package manager like [conda](https://docs.conda.io/en/latest/)
 
 ```bash
 pip install -r requirements.txt
-pip install faiss-cpu
-```
-
-### For Window
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly recommend using python package manager like [conda](https://docs.conda.io/en/latest/)
-
-```bash
-pip install git+https://github.com/openai/CLIP.git
-pip install git+https://github.com/chroma-core/chroma.git
-pip install streamlit faiss-cpu open-clip-torch
 ```
 
 ## Managing dependencies
@@ -30,30 +19,6 @@ uv pip sync requirements.txt
 
 ## Data Folder Structure
 
-Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./data-source` directory.
-
-
-1. data-source: read only folder, source data should be placed here
-```
-mkdir data-source
-# copy all downloaded data here
-# then unzip all
-# rearrange input data to correct structure
-```
-
-2. data-staging: all transformation should go there
-```bash
-mkdir data-staging
-mkdir data-staging/audio
-mkdir data-staging/transcripts
-mkdir data-staging/transcripts-en
-mkdir data-staging/clip-features
-```
-
-3. data-index: artifact of index process go here
-```commandline
-mkdir data-index
-```
 
 your projects structure should look like this
 
@@ -88,6 +53,30 @@ tree -L 2 -l .
 ├── requirements.txt
 ├── run-pipline.sh
 
+```
+
+1. data-source: read only folder, source data should be placed here
+```
+mkdir data-source
+# copy all downloaded data here
+# then unzip all
+# rearrange input data to correct structure
+```
+
+Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside that `./data-source` directory.
+
+2. data-staging: all transformation should go there
+```bash
+mkdir data-staging
+mkdir data-staging/audio
+mkdir data-staging/transcripts
+mkdir data-staging/transcripts-en
+mkdir data-staging/clip-features
+```
+
+3. data-index: artifact of index process go here
+```commandline
+mkdir data-index
 ```
 
 ## Usage

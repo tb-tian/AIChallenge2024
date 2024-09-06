@@ -16,7 +16,7 @@ def mapping_from_keyframe_to_audio_chunk(video_id):
     video_keyframe_chunk_dict = {video_id: {}}
 
     with open(keyframe_path) as keyframe_file, open(chunk_path) as chunk_file, open(
-            tmp_mapping_path, "w"
+        tmp_mapping_path, "w"
     ) as mapping_file:
         keyframe_time = csv.reader(keyframe_file)
         chunk_time = csv.reader(chunk_file)
