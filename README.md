@@ -28,7 +28,7 @@ uv pip compile requirements.in --output-file requirements.txt
 uv pip sync requirements.txt
 ```
 
-## Sample Dataset
+## Data Folder Structure
 
 Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./data-source` directory.
 

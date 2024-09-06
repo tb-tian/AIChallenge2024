@@ -2,6 +2,7 @@ datasets
 datasets_*
 data-staging
 data-source
+data-index
 
 tmp
 app.log

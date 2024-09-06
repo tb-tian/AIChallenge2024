@@ -8,7 +8,11 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
+import helpers
+from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
+
+logger = get_logger()
 
 clip_model, _, preprocess = open_clip.create_model_and_transforms(
     "ViT-B-32", pretrained="openai"
@@ -26,13 +30,15 @@ def embedding(pic_path):
 
 
 def main():
-    # Create an array of keyframe and video
     all_video, video_keyframe_dict = load_all_video_keyframes_info()
 
     for v in tqdm(all_video, desc="Processing videos"):
-        keyframe_array = np.empty(
-            (0, 512)
-        )  # Initialize an empty array with shape (0, 512)
+        # Initialize an empty array with shape (0, 512)
+        np_out = f"./data-staging/clip-features/{v}.npy"
+        keyframe_array = np.empty((0, 512))
+        if helpers.is_exits(np_out):
+            logger.info(f"{np_out} exists, skip")
+            continue
         for k in tqdm(
             video_keyframe_dict[v],
             desc=f"Processing keyframes for video {v}",
@@ -41,7 +47,7 @@ def main():
             keyframe_path = f"./data-source/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
-        np.save(f"./data-staging/clip-features/{v}.npy", keyframe_array)
+        np.save(np_out, keyframe_array)
 
     # Load clip feature into a dictionary of numpy arrays
     embedding_dict = {}

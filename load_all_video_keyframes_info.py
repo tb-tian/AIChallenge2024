@@ -5,7 +5,7 @@ def load_all_video_keyframes_info():
     """
     Create a list of video and list of keyframe
     """
-    print("creating mapping from videos and keyframes")
+    print("loading all videos and keyframes information")
     all_keyframe = glob("./data-source/keyframes/*/*.jpg")
     video_keyframe_dict = {}
     all_video = glob("./data-source/videos/*")

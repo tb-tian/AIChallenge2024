@@ -6,7 +6,7 @@ echo "video_to_audio"
 python video_to_audio.py
 
 echo "speech_to_text"
-python speech_to_text.py
+python speech_to_text_v2.py
 
 echo "translation"
 python translation.py
