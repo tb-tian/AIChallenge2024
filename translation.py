@@ -1,32 +1,37 @@
-import codecs
-
 from easynmt import EasyNMT
+from tqdm import tqdm
 
+import helpers
 from helpers import get_logger
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
-# translate_model = EasyNMT("m2m_100_418M")
-translate_model = EasyNMT("opus-mt")
+translate_model = EasyNMT("m2m_100_418M")
+# translate_model = EasyNMT("opus-mt")
 
 logger = get_logger()
 
 
-def translate(video):
+def translate(vi_text, en_text):
     """
     Translate text from vietnamese to english
     """
-    logger.info(f"translating {video}...")
-    vi_text = f"./data-staging/transcripts/{video}.txt"
-    en_text = f"./data-staging/transcripts-en/{video}.txt"
     with open(vi_text, "r", encoding="utf-8") as file:
         lines = file.readlines()
-
+    tmp = ""
+    for line in tqdm(lines):
+        tmp += translate_model.translate(line, target_lang="en").strip()
+        tmp += "\n"
     with open(en_text, "a") as file:
-        for line in lines:
-            file.write(translate_model.translate(line, target_lang="en"))
+        file.write(tmp)
 
 
 if __name__ == "__main__":
-    all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
-    for v in all_video:
-        translate(v)
+    all_video, video_keyframe_dict = load_all_video_keyframes_info()
+    for video in all_video:
+        vi_text = f"./data-staging/transcripts/{video}.txt"
+        en_text = f"./data-staging/transcripts-en/{video}.txt"
+        if helpers.is_exits(en_text):
+            logger.debug(f"ignore {vi_text}")
+            continue
+        logger.info(f"translating {vi_text} to {en_text}...")
+        translate(vi_text, en_text)

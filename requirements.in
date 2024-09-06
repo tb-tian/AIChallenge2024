@@ -1,6 +1,6 @@
 streamlit
 numpy
-torch --index-url https://download.pytorch.org/whl/cu121
+torch
 faiss-cpu
 open_clip_torch
 openai-whisper

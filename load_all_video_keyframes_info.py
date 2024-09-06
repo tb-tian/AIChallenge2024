@@ -1,14 +1,14 @@
 from glob import glob
 
 
-def create_video_list_and_video_keyframe_dict():
+def load_all_video_keyframes_info():
     """
     Create a list of video and list of keyframe
     """
     print("creating mapping from videos and keyframes")
-    all_keyframe = glob("./datasets/keyframes/*/*.jpg")
+    all_keyframe = glob("./data-source/keyframes/*/*.jpg")
     video_keyframe_dict = {}
-    all_video = glob("./datasets/videos/*")
+    all_video = glob("./data-source/videos/*")
     all_video = [v.rsplit("/", 1)[-1][:-4] for v in all_video]
     all_video = sorted(all_video)
 

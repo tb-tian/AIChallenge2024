@@ -1,13 +1,15 @@
+import csv
 import os
+import sys
+
+import cv2
 import numpy as np
 import tensorflow as tf
-import sys
-from transnetv2 import TransNetV2
-from loading_dict import create_video_list_and_video_keyframe_dict
-import cv2
-import csv
 
-all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+from load_all_video_keyframes_info import load_all_video_keyframes_info
+from transnetv2 import TransNetV2
+
+all_video, video_keyframe_dict = load_all_video_keyframes_info()
 
 
 def segmentation():

@@ -3,7 +3,7 @@ import subprocess
 
 import helpers
 from helpers import get_logger
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 logger = get_logger()
 
@@ -19,7 +19,7 @@ def video_to_audio(video_path, audio_path):
 
 
 if __name__ == "__main__":
-    all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+    all_video, video_keyframe_dict = load_all_video_keyframes_info()
     for v in all_video:
         input_video_path = f"./data-source/videos/{v}.mp4"
         target_audio_path = os.path.basename(input_video_path)

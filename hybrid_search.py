@@ -12,9 +12,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 
 from helpers import get_logger
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
-all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+all_video, video_keyframe_dict = load_all_video_keyframes_info()
 logger = get_logger()
 
 
@@ -44,7 +44,7 @@ def keyframe_querying(query):
     query_embedding = normalize(query_embedding, axis=1)
     limit = keyframe_index.ntotal
     distances, indices = keyframe_index.search(query_embedding, limit)
-    similarity_scores = 1 / (distances + 1e-8) 
+    similarity_scores = 1 / (distances + 1e-8)
     distance_array = [
         (embedding_info[idx][0], embedding_info[idx][1], dist)
         for dist, idx in zip(similarity_scores[0], indices[0])
@@ -139,7 +139,9 @@ def query(query, limit):
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
-            rerank.append((v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf]))
+            rerank.append(
+                (v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf])
+            )
             # rerank.append((v, kf, kf_res[v][kf]))
 
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)

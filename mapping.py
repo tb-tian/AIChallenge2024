@@ -1,9 +1,9 @@
 import csv
 import os
 
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
-all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+all_video, video_keyframe_dict = load_all_video_keyframes_info()
 
 
 def mapping_from_keyframe_to_chunk(

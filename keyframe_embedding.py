@@ -8,6 +8,8 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
+from load_all_video_keyframes_info import load_all_video_keyframes_info
+
 clip_model, _, preprocess = open_clip.create_model_and_transforms(
     "ViT-B-32", pretrained="openai"
 )
@@ -25,7 +27,7 @@ def embedding(pic_path):
 
 def main():
     # Create an array of keyframe and video
-    all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+    all_video, video_keyframe_dict = load_all_video_keyframes_info()
 
     for v in tqdm(all_video, desc="Processing videos"):
         keyframe_array = np.empty(
@@ -36,15 +38,15 @@ def main():
             desc=f"Processing keyframes for video {v}",
             leave=False,
         ):
-            keyframe_path = f"./datasets/keyframes/{v}/{k}.jpg"
+            keyframe_path = f"./data-source/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
-        np.save(f"./datasets/clip-features/{v}.npy", keyframe_array)
+        np.save(f"./data-staging/clip-features/{v}.npy", keyframe_array)
 
     # Load clip feature into a dictionary of numpy arrays
     embedding_dict = {}
     for v in all_video:
-        clip_path = f"./datasets/clip-features/{v}.npy"
+        clip_path = f"./data-staging/clip-features/{v}.npy"
         a = np.load(clip_path)
         embedding_dict[v] = {}
         for i, k in enumerate(video_keyframe_dict[v]):
@@ -63,10 +65,10 @@ def main():
     # Build the faiss index
     index = faiss.IndexFlatL2(embedding_array.shape[1])
     index.add(embedding_array)
-    faiss.write_index(index, "./datasets/embedding.index")
+    faiss.write_index(index, "./data-index/embedding.index")
 
     # Save info_array into a npy file
-    np.save("./datasets/info.npy", info_array)
+    np.save("./data-index/embedding_info.npy", info_array)
 
 
 if __name__ == "__main__":

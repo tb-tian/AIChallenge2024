@@ -6,9 +6,9 @@ from scipy.sparse import load_npz, save_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
-all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+all_video, video_keyframe_dict = load_all_video_keyframes_info()
 
 
 def embedding():

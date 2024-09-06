@@ -1,7 +1,8 @@
+import csv
+
 import numpy as np
 import streamlit as st
 from PIL import Image
-import csv
 
 from vectordb import VectorDB
 
@@ -20,13 +21,15 @@ def video_dialog(video, kf):
         lines = file.readlines()
         mapping = map_file.readlines()
         kf = int(kf)
-        start, end = lines[kf-1].split(' ')
-        n,pts_time,fps,frame_idx = mapping[kf].split(',')
-    start = int(start)/float(fps)
-    end = int(end)/float(fps)
+        start, end = lines[kf - 1].split(" ")
+        n, pts_time, fps, frame_idx = mapping[kf].split(",")
+    start = int(start) / float(fps)
+    end = int(end) / float(fps)
     print(start, end)
     st.write(f"{video}, {frame_idx}")
-    st.video(f"./datasets/videos/{video}.mp4", start_time=start, end_time=end,autoplay=True)
+    st.video(
+        f"./datasets/videos/{video}.mp4", start_time=start, end_time=end, autoplay=True
+    )
 
 
 if __name__ == "__main__":

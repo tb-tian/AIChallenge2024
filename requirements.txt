@@ -7,24 +7,14 @@ absl-py==2.1.0
     #   tensorflow
 accelerate==0.33.0
     # via transformers
-aiohappyeyeballs==2.4.0
-    # via aiohttp
-aiohttp==3.10.5
-    # via fsspec
-aiosignal==1.3.1
-    # via aiohttp
 aiosqlite==0.20.0
     # via prefect
 alembic==1.13.2
-    # via
-    #   optuna
-    #   prefect
+    # via prefect
 altair==5.4.0
     # via streamlit
 annotated-types==0.7.0
     # via pydantic
-antlr4-python3-runtime==4.9.3
-    # via omegaconf
 anyio==4.4.0
     # via
     #   httpx
@@ -34,19 +24,14 @@ apprise==1.9.0
     # via prefect
 asgi-lifespan==2.1.0
     # via prefect
-asteroid-filterbanks==0.4.0
-    # via pyannote-audio
 astunparse==1.6.3
     # via tensorflow
 async-timeout==4.0.3
-    # via
-    #   aiohttp
-    #   asyncpg
+    # via asyncpg
 asyncpg==0.29.0
     # via prefect
 attrs==24.2.0
     # via
-    #   aiohttp
     #   jsonschema
     #   referencing
 audioread==3.0.1
@@ -90,10 +75,6 @@ colorama==0.4.6
     # via griffe
 coloredlogs==15.0.1
     # via onnxruntime
-colorlog==6.8.2
-    # via optuna
-contourpy==1.3.0
-    # via matplotlib
 coolname==2.2.0
     # via prefect
 croniter==3.0.3
@@ -102,22 +83,14 @@ cryptography==43.0.1
     # via prefect
 ctranslate2==4.3.1
     # via faster-whisper
-cycler==0.12.1
-    # via matplotlib
 dateparser==1.2.0
     # via prefect
 decorator==5.1.1
     # via librosa
 docker==7.1.0
     # via prefect
-docopt==0.6.2
-    # via
-    #   pyannote-metrics
-    #   pyannote-pipeline
 easynmt==2.0.2
     # via -r requirements.in
-einops==0.8.0
-    # via pyannote-audio
 exceptiongroup==1.2.2
     # via
     #   anyio
@@ -127,7 +100,7 @@ faiss-cpu==1.8.0.post1
 fastapi==0.113.0
     # via prefect
 faster-whisper==1.0.0
-    # via whisperx
+    # via -r requirements.in
 fasttext==0.9.3
     # via easynmt
 ffmpeg-python==0.2.0
@@ -137,7 +110,6 @@ ffmpeg-python==0.2.0
 filelock==3.15.4
     # via
     #   huggingface-hub
-    #   pyannote-pipeline
     #   torch
     #   transformers
     #   triton
@@ -145,18 +117,10 @@ flatbuffers==24.3.25
     # via
     #   onnxruntime
     #   tensorflow
-fonttools==4.53.1
-    # via matplotlib
-frozenlist==1.4.1
-    # via
-    #   aiohttp
-    #   aiosignal
 fsspec==2024.6.1
     # via
     #   huggingface-hub
-    #   lightning
     #   prefect
-    #   pytorch-lightning
 ftfy==6.2.3
     # via open-clip-torch
 future==1.0.0
@@ -202,8 +166,6 @@ huggingface-hub==0.24.5
     #   accelerate
     #   faster-whisper
     #   open-clip-torch
-    #   pyannote-audio
-    #   speechbrain
     #   timm
     #   tokenizers
     #   transformers
@@ -215,14 +177,11 @@ humanize==4.10.0
     #   prefect
 hyperframe==6.0.1
     # via h2
-hyperpyyaml==1.2.2
-    # via speechbrain
 idna==3.7
     # via
     #   anyio
     #   httpx
     #   requests
-    #   yarl
 isort==5.13.2
     # via -r requirements.in
 jinja2==3.1.4
@@ -239,7 +198,6 @@ joblib==1.4.2
     #   librosa
     #   nltk
     #   scikit-learn
-    #   speechbrain
 jsonpatch==1.33
     # via prefect
 jsonpointer==3.0.0
@@ -250,27 +208,14 @@ jsonschema==4.23.0
     #   prefect
 jsonschema-specifications==2023.12.1
     # via jsonschema
-julius==0.2.7
-    # via torch-audiomentations
 keras==3.5.0
     # via tensorflow
-kiwisolver==1.4.7
-    # via matplotlib
 lazy-loader==0.4
     # via librosa
 libclang==18.1.1
     # via tensorflow
 librosa==0.10.2.post1
-    # via
-    #   -r requirements.in
-    #   torch-audiomentations
-lightning==2.3.3
-    # via pyannote-audio
-lightning-utilities==0.11.7
-    # via
-    #   lightning
-    #   pytorch-lightning
-    #   torchmetrics
+    # via -r requirements.in
 lit==18.1.8
     # via triton
 llvmlite==0.43.0
@@ -290,8 +235,6 @@ markupsafe==2.1.5
     #   jinja2
     #   mako
     #   werkzeug
-matplotlib==3.9.2
-    # via pyannote-metrics
 mdurl==0.1.2
     # via markdown-it-py
 ml-dtypes==0.4.0
@@ -304,10 +247,6 @@ mpmath==1.3.0
     # via sympy
 msgpack==1.0.8
     # via librosa
-multidict==6.0.5
-    # via
-    #   aiohttp
-    #   yarl
 mypy-extensions==1.0.0
     # via black
 namex==0.0.8
@@ -317,9 +256,7 @@ narwhals==1.3.0
 networkx==3.3
     # via torch
 nltk==3.9.1
-    # via
-    #   easynmt
-    #   whisperx
+    # via easynmt
 numba==0.60.0
     # via
     #   librosa
@@ -328,8 +265,6 @@ numpy==1.26.4
     # via
     #   -r requirements.in
     #   accelerate
-    #   asteroid-filterbanks
-    #   contourpy
     #   ctranslate2
     #   easynmt
     #   faiss-cpu
@@ -337,31 +272,20 @@ numpy==1.26.4
     #   h5py
     #   keras
     #   librosa
-    #   lightning
-    #   matplotlib
     #   ml-dtypes
     #   numba
     #   onnxruntime
     #   openai-whisper
-    #   opencv-python
     #   opt-einsum
-    #   optuna
     #   pandas
-    #   pyannote-core
-    #   pyannote-metrics
     #   pyarrow
     #   pydeck
-    #   pytorch-lightning
-    #   pytorch-metric-learning
     #   scikit-learn
     #   scipy
     #   soxr
-    #   speechbrain
     #   streamlit
     #   tensorboard
-    #   tensorboardx
     #   tensorflow
-    #   torchmetrics
     #   torchvision
     #   transformers
 nvidia-cublas-cu11==11.10.3.66
@@ -391,22 +315,16 @@ nvidia-nvtx-cu11==11.7.91
     # via torch
 oauthlib==3.2.2
     # via requests-oauthlib
-omegaconf==2.3.0
-    # via pyannote-audio
 onnxruntime==1.19.2
     # via faster-whisper
 open-clip-torch==2.26.1
     # via -r requirements.in
 openai-whisper==20230306
     # via -r requirements.in
-opencv-python==4.10.0.84
-    # via -r requirements.in
 opt-einsum==3.3.0
     # via tensorflow
 optree==0.12.1
     # via keras
-optuna==4.0.0
-    # via pyannote-pipeline
 orjson==3.10.7
     # via prefect
 packaging==24.1
@@ -418,28 +336,15 @@ packaging==24.1
     #   huggingface-hub
     #   keras
     #   lazy-loader
-    #   lightning
-    #   lightning-utilities
-    #   matplotlib
     #   onnxruntime
-    #   optuna
     #   pooch
     #   prefect
-    #   pytorch-lightning
-    #   speechbrain
     #   streamlit
     #   tensorboard
-    #   tensorboardx
     #   tensorflow
-    #   torch-pitch-shift
-    #   torchmetrics
     #   transformers
 pandas==2.2.2
-    # via
-    #   pyannote-database
-    #   pyannote-metrics
-    #   streamlit
-    #   whisperx
+    # via streamlit
 pathspec==0.12.1
     # via
     #   black
@@ -448,7 +353,6 @@ pendulum==3.0.0
     # via prefect
 pillow==10.4.0
     # via
-    #   matplotlib
     #   streamlit
     #   torchvision
 platformdirs==4.2.2
@@ -459,8 +363,6 @@ pooch==1.8.2
     # via librosa
 prefect==3.0.0
     # via -r requirements.in
-primepy==1.3
-    # via torch-pitch-shift
 prometheus-client==0.20.0
     # via prefect
 protobuf==4.25.4
@@ -469,27 +371,9 @@ protobuf==4.25.4
     #   onnxruntime
     #   streamlit
     #   tensorboard
-    #   tensorboardx
     #   tensorflow
 psutil==6.0.0
     # via accelerate
-pyannote-audio==3.1.1
-    # via whisperx
-pyannote-core==5.0.0
-    # via
-    #   pyannote-audio
-    #   pyannote-database
-    #   pyannote-metrics
-    #   pyannote-pipeline
-pyannote-database==5.1.0
-    # via
-    #   pyannote-audio
-    #   pyannote-metrics
-    #   pyannote-pipeline
-pyannote-metrics==3.2.1
-    # via pyannote-audio
-pyannote-pipeline==3.0.1
-    # via pyannote-audio
 pyarrow==17.0.0
     # via streamlit
 pybind11==2.13.5
@@ -516,13 +400,10 @@ pydub==0.25.1
     # via -r requirements.in
 pygments==2.18.0
     # via rich
-pyparsing==3.1.4
-    # via matplotlib
 python-dateutil==2.9.0.post0
     # via
     #   croniter
     #   dateparser
-    #   matplotlib
     #   pandas
     #   pendulum
     #   prefect
@@ -531,10 +412,6 @@ python-dotenv==1.0.1
     # via pydantic-settings
 python-slugify==8.0.4
     # via prefect
-pytorch-lightning==2.3.3
-    # via lightning
-pytorch-metric-learning==2.6.0
-    # via pyannote-audio
 pytz==2024.1
     # via
     #   croniter
@@ -547,14 +424,7 @@ pyyaml==6.0.2
     #   apprise
     #   ctranslate2
     #   huggingface-hub
-    #   hyperpyyaml
-    #   lightning
-    #   omegaconf
-    #   optuna
     #   prefect
-    #   pyannote-database
-    #   pyannote-pipeline
-    #   pytorch-lightning
     #   timm
     #   transformers
 readchar==4.2.0
@@ -589,7 +459,6 @@ rich==13.7.1
     # via
     #   keras
     #   prefect
-    #   pyannote-audio
     #   streamlit
     #   typer
 rpds-py==0.20.0
@@ -597,9 +466,7 @@ rpds-py==0.20.0
     #   jsonschema
     #   referencing
 ruamel-yaml==0.18.6
-    # via
-    #   hyperpyyaml
-    #   prefect
+    # via prefect
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
 safetensors==0.4.4
@@ -608,29 +475,17 @@ safetensors==0.4.4
     #   timm
     #   transformers
 scikit-learn==1.5.1
-    # via
-    #   librosa
-    #   pyannote-metrics
-    #   pyannote-pipeline
-    #   pytorch-metric-learning
+    # via librosa
 scipy==1.14.1
     # via
     #   librosa
-    #   pyannote-core
-    #   pyannote-metrics
     #   scikit-learn
-    #   speechbrain
-semver==3.0.2
-    # via pyannote-audio
 sentencepiece==0.2.0
-    # via
-    #   easynmt
-    #   speechbrain
+    # via easynmt
 setuptools==74.1.2
     # via
     #   ctranslate2
     #   fasttext
-    #   lightning-utilities
     #   nvidia-cublas-cu11
     #   nvidia-cuda-cupti-cu11
     #   nvidia-cuda-runtime-cu11
@@ -639,7 +494,6 @@ setuptools==74.1.2
     #   nvidia-nvtx-cu11
     #   tensorboard
     #   tensorflow
-    #   whisperx
 shellingham==1.5.4
     # via typer
 six==1.16.0
@@ -658,23 +512,17 @@ sniffio==1.3.1
     #   asgi-lifespan
     #   httpx
     #   prefect
-sortedcontainers==2.4.0
-    # via pyannote-core
 soundfile==0.12.1
     # via
     #   -r requirements.in
     #   librosa
-    #   pyannote-audio
 soxr==0.5.0
     # via librosa
-speechbrain==1.0.1
-    # via pyannote-audio
 speechrecognition==3.10.4
     # via -r requirements.in
 sqlalchemy==2.0.34
     # via
     #   alembic
-    #   optuna
     #   prefect
 starlette==0.38.4
     # via fastapi
@@ -683,18 +531,13 @@ streamlit==1.37.1
 sympy==1.13.2
     # via
     #   onnxruntime
-    #   pyannote-metrics
     #   torch
-tabulate==0.9.0
-    # via pyannote-metrics
 tenacity==8.5.0
     # via streamlit
 tensorboard==2.17.1
     # via tensorflow
 tensorboard-data-server==0.7.2
     # via tensorboard
-tensorboardx==2.6.2.2
-    # via pyannote-audio
 tensorflow==2.17.0
     # via -r requirements.in
 tensorflow-io-gcs-filesystem==0.37.1
@@ -723,45 +566,15 @@ torch==2.0.0
     # via
     #   -r requirements.in
     #   accelerate
-    #   asteroid-filterbanks
     #   easynmt
-    #   julius
-    #   lightning
     #   open-clip-torch
     #   openai-whisper
-    #   pyannote-audio
-    #   pytorch-lightning
-    #   pytorch-metric-learning
-    #   speechbrain
     #   timm
-    #   torch-audiomentations
-    #   torch-pitch-shift
-    #   torchaudio
-    #   torchmetrics
     #   torchvision
     #   transformers
     #   triton
-    #   whisperx
-torch-audiomentations==0.11.1
-    # via pyannote-audio
-torch-pitch-shift==1.2.4
-    # via torch-audiomentations
-torchaudio==2.0.1
-    # via
-    #   -r requirements.in
-    #   pyannote-audio
-    #   speechbrain
-    #   torch-audiomentations
-    #   torch-pitch-shift
-    #   whisperx
-torchmetrics==1.4.1
-    # via
-    #   lightning
-    #   pyannote-audio
-    #   pytorch-lightning
 torchvision==0.15.1
     # via
-    #   -r requirements.in
     #   open-clip-torch
     #   timm
 tornado==6.4.1
@@ -771,49 +584,35 @@ tqdm==4.66.5
     #   -r requirements.in
     #   easynmt
     #   huggingface-hub
-    #   lightning
     #   nltk
     #   open-clip-torch
     #   openai-whisper
-    #   optuna
-    #   pyannote-pipeline
-    #   pytorch-lightning
-    #   pytorch-metric-learning
-    #   speechbrain
     #   transformers
 transformers==4.39.3
     # via
     #   -r requirements.in
     #   easynmt
     #   openai-whisper
-    #   whisperx
 triton==2.0.0
     # via
     #   openai-whisper
     #   torch
 typer==0.12.5
-    # via
-    #   prefect
-    #   pyannote-database
+    # via prefect
 typing-extensions==4.12.2
     # via
     #   aiosqlite
     #   alembic
     #   altair
     #   anyio
-    #   asteroid-filterbanks
     #   black
     #   fastapi
     #   huggingface-hub
     #   librosa
-    #   lightning
-    #   lightning-utilities
     #   optree
     #   prefect
-    #   pyannote-core
     #   pydantic
     #   pydantic-core
-    #   pytorch-lightning
     #   speechrecognition
     #   sqlalchemy
     #   streamlit
@@ -853,9 +652,5 @@ wheel==0.44.0
     #   nvidia-curand-cu11
     #   nvidia-cusparse-cu11
     #   nvidia-nvtx-cu11
-whisperx @ git+https://github.com/m-bain/whisperx.git@9e3a9e0e38fcec1304e1784381059a0e2c670be5
-    # via -r requirements.in
 wrapt==1.16.0
     # via tensorflow
-yarl==1.9.11
-    # via aiohttp

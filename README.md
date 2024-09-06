@@ -30,92 +30,96 @@ uv pip sync requirements.txt
 
 ## Sample Dataset
 
-Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./datasets` directory.
+Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./data-source` directory.
 
+
+1. data-source: read only folder, source data should be placed here
 ```
 mkdir data-source
-cd data-source
 # copy all downloaded data here
 # then unzip all
 # rearrange input data to correct structure
 ```
 
-
+2. data-staging: all transformation should go there
 ```bash
 mkdir data-staging
 mkdir data-staging/audio
 mkdir data-staging/transcripts
 mkdir data-staging/transcripts-en
+mkdir data-staging/clip-features
+```
+
+3. data-index: artifact of index process go here
+```commandline
+mkdir data-index
 ```
 
 your projects structure should look like this
 
-
 ```
+tree -L 2 -l .
+
 .
+├── app.log
 ├── cli.py
-├── datasets
-│   ├── clip-features
+├── data-index
+│   ├── embedding.index
+│   └── embedding_info.npy
+├── data-source ->
 │   ├── keyframes
-│   ├── map-keyframes
-│   ├── preprocessing (created for storing keyframe segments)
-│   ├── texts (created for storing vietnamese and english translation)
-│   ├── timestamps (created for storing sound chunk)
-│   ├── videos
-│   ├── document_embedding_info.pkl (created after running document_embedding.py)
-│   ├── info.npy (created after running keyframe_embedding.py)
-│   ├── embedding.index (created after running keyframe_embedding.py)
-│   ├── mapping.csv (created after running mapping.py)
-│   ├── tfidf_matrix.npz (created after running document_embedding.py)
-│   ├── tfidf_vectorizer.pkl (created after running document_embedding.py)
-│   └── ...
-├── transnetv2-weights (weight for transnetv2 model)
-├── README.md
+│   └── videos
+├── data-staging
+│   ├── audio
+│   ├── clip-features
+│   ├── transcripts
+│   └── transcripts-en
 ├── document_embedding.py
+├── format-code.sh
+├── helpers.py
+├── hybrid_search.py
 ├── keyframe_embedding.py
+├── keyframe_extractor.py
 ├── loading_dict.py
+├── mapping.py
+├── models
+├── README.md
 ├── requirements.in
 ├── requirements.txt
-├── slicer.py
-├── speech_to_text.py
-├── translation.py
-├── vectordb.py
-├── video_processing.py
-└── web_app.py
+├── run-pipline.sh
+
 ```
 
 ## Usage
 
 ### Indexing Stage
 
+TLDR: using `bash run-pipline.sh`
+
+```
+# maybe out of date docs
+
 **Step 1**: Prepare the project structure as shown above and ensure you have the videos downloaded.
 
 **Step 2**: Run [video_processing.py](./video_processing.py). This process may take a significant amount of time.
-```bash
 python video_processing.py
-```
 Then, you will have vietnamese and english dialogue in [timestamps](./datasets/timestamps/) folder.
 
 **Step 3**: Run [keyframe_extractor.py](./keyframe_extractor.py). This process will
 1. extract keyframe from the video and store them in `keyframes`
 2. create a file csv of frame index in `map-keyframes` folder.
-```bash
 python keyframe_extractor.py
-```
+
 
 
 **Step 4**: Run [document_embedding.py](./document_embedding.py) and [keyframe_embedding.py](./keyframe_embedding.py)
-```bash
 python document_embedding.py 
 python keyframe_embedding.py
-```
-
 
 **Step 5**: Run [mapping.py](./mapping.py). This process will create `mapping.csv` to map each keyframe to the corresponding chunk of dialogue.
-
-```bash
 python mapping.py
 ```
+
 
 ### Retrieval Stage
 
@@ -137,4 +141,8 @@ PEP-8 with black formatter and isort
 ```
 black .
 isort .
+
+# or
+
+./format-code.sh
 ```

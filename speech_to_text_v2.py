@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 import helpers
 from helpers import get_logger
-from loading_dict import create_video_list_and_video_keyframe_dict
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 from slicer import Slicer
 
 # whisper_model = whisper.load_model("large")
@@ -100,7 +100,7 @@ def speech_to_text(audio_path, transcript_path):
 
 
 if __name__ == "__main__":
-    all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+    all_video, video_keyframe_dict = load_all_video_keyframes_info()
     for v in all_video:
         logger.info(f"running {v}...")
         audio_path = f"./data-staging/audio/{v}.wav"
