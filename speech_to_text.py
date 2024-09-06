@@ -36,9 +36,10 @@ def recognize_speech_from_audio(audio_path) -> str:
     return text
 
 
-def speech_to_text(audio_path, transcript_path):
+def speech_to_text(audio_path, video_path, transcript_path):
     """
     Processes a video file to extract audio and recognize speech.
+    TODO: shouldn't pass video_path around?
     """
     logger.info(f"slicing and running whisper for {audio_path}...")
 
@@ -51,7 +52,7 @@ def speech_to_text(audio_path, transcript_path):
         hop_size=10,
         max_sil_kept=400,
     )
-    chunks = slicer.slice(audio)
+    chunks = slicer.slice(audio, video_path)
 
     transcript = ""
     for i, chunk in enumerate(tqdm(chunks, unit="chunk")):
@@ -70,13 +71,16 @@ def speech_to_text(audio_path, transcript_path):
 
 
 if __name__ == "__main__":
+    raise Exception("nah, you should use speech_to_text_v2")
+
     all_video, video_keyframe_dict = load_all_video_keyframes_info()
     for v in all_video:
         audio_path = f"./data-staging/audio/{v}.wav"
+        video_path = f"./data-source/videos/{v}.mp4"
         transcript_path = f"./data-staging/transcripts/{v}.txt"
 
         if helpers.is_exits(transcript_path):
             logger.debug(f"ignore {transcript_path}")
             continue
         logger.info(f"running {v}...")
-        speech_to_text(audio_path, transcript_path)
+        speech_to_text(audio_path, video_path, transcript_path)

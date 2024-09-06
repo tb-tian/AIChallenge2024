@@ -250,6 +250,7 @@ numpy==1.26.4
     #   numba
     #   onnxruntime
     #   openai-whisper
+    #   opencv-python
     #   opt-einsum
     #   optuna
     #   pandas
@@ -302,6 +303,8 @@ onnxruntime==1.19.2
 open-clip-torch==2.26.1
     # via -r requirements.in
 openai-whisper==20230306
+    # via -r requirements.in
+opencv-python==4.10.0.84
     # via -r requirements.in
 opt-einsum==3.3.0
     # via tensorflow

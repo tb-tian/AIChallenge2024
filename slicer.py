@@ -76,7 +76,7 @@ class Slicer:
             ]
 
     # @timeit
-    def slice(self, waveform):
+    def slice(self, waveform, video_path):
         if len(waveform.shape) > 1:
             samples = waveform.mean(axis=0)
         else:
@@ -166,7 +166,16 @@ class Slicer:
             pos = rms_list[silence_start : silence_end + 1].argmin() + silence_start
             sil_tags.append((pos, total_frames + 1))
         # Apply and return slices.
+        vid_name = os.path.basename(video_path)[:-4]
+        timestamp_path = "./data-staging/audio-chunk-timestamps/" + vid_name + ".csv"
         if len(sil_tags) == 0:
+            idk = open(f"{timestamp_path}.csv", "w+")
+            idk.write("start_time,end_time\n")
+            idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
+            for i in range(len(sil_tags) - 1):
+                idk.write(
+                    str(sil_tags[i][1])[:-2] + "," + str(sil_tags[i + 1][0])[:-2] + "\n"
+                )
             return [waveform]
         else:
             chunks = []
@@ -180,4 +189,13 @@ class Slicer:
                 chunks.append(
                     self._apply_slice(waveform, sil_tags[-1][1], total_frames)
                 )
+
+            idk = open(f"{timestamp_path}.csv", "w+")
+            idk.write("start_time,end_time\n")
+            idk.write("0," + str(sil_tags[0][0])[:-2] + "\n")
+            for i in range(len(sil_tags) - 1):
+                idk.write(
+                    str(sil_tags[i][1])[:-2] + "," + str(sil_tags[i + 1][0])[:-2] + "\n"
+                )
+
             return chunks

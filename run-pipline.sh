@@ -14,3 +14,7 @@ python translation.py
 # 2. Try to get visual information using CLIP
 echo "keyframe_embedding"
 python keyframe_embedding.py
+
+# 3.
+python mapping.py
+

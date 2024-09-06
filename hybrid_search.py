@@ -19,7 +19,6 @@ logger = get_logger()
 
 
 def keyframe_querying(query):
-
     model, _, preprocess = open_clip.create_model_and_transforms(
         "ViT-B-32", pretrained="openai"
     )
@@ -27,12 +26,12 @@ def keyframe_querying(query):
     tokenizer = open_clip.get_tokenizer("ViT-B-32")
 
     # Load the keyframe embedding from the FAISS index
-    keyframe_index = faiss.read_index("./datasets/embedding.index")
+    keyframe_index = faiss.read_index("./data-index/embedding.index")
 
     # Extract the vectors from the FAISS index
     keyframe_embeddings = keyframe_index.reconstruct_n(0, keyframe_index.ntotal)
     keyframe_embeddings = np.array(keyframe_embeddings)
-    embedding_info = np.load("./datasets/info.npy")
+    embedding_info = np.load("./data-index/embedding_info.npy")
 
     print(f"loaded {keyframe_embeddings.size} keyframes")
 
@@ -59,11 +58,10 @@ def keyframe_querying(query):
 
 
 def document_querying(query):
-
     # Load the data
-    tfidf_matrix = load_npz("./datasets/tfidf_matrix.npz")
-    vectorizer = joblib.load("./datasets/tfidf_vectorizer.pkl")
-    embedding_info = joblib.load("./datasets/document_embedding_info.pkl")
+    tfidf_matrix = load_npz("./data-index/tfidf_matrix.npz")
+    vectorizer = joblib.load("./data-index/tfidf_vectorizer.pkl")
+    embedding_info = joblib.load("./data-index/document_embedding_info.pkl")
     mapping_df = pd.read_csv("./datasets/mapping.csv", dtype={"keyframe": str})
 
     print(f"loaded {tfidf_matrix.shape} documents")
