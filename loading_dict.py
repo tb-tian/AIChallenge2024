@@ -5,6 +5,7 @@ def create_video_list_and_video_keyframe_dict():
     """
     Create a list of video and list of keyframe
     """
+    print("creating mapping from videos and keyframes")
     all_keyframe = glob("./datasets/keyframes/*/*.jpg")
     video_keyframe_dict = {}
     all_video = glob("./datasets/videos/*")

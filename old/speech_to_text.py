@@ -5,20 +5,16 @@ import subprocess
 import librosa
 import soundfile
 import whisper
+from loguru import logger
 from tqdm import tqdm
 
-import helpers
-from helpers import get_logger
 from loading_dict import create_video_list_and_video_keyframe_dict
 from slicer import Slicer
 
 whisper_model = whisper.load_model("large")
-# whisper_model = whisper.load_model("tiny")
-
-logger = get_logger()
 
 
-def recognize_speech_from_audio(audio_path) -> str:
+def recognize_speech_from_audio(audio_path):
     """
     Recognizes speech from an audio file using the whisper library.
     """
@@ -36,12 +32,17 @@ def recognize_speech_from_audio(audio_path) -> str:
     return text
 
 
-def speech_to_text(audio_path, transcript_path):
+def speech_to_text(video_path):
     """
     Processes a video file to extract audio and recognize speech.
     """
-    logger.info(f"slicing and running whisper for {audio_path}...")
+    logger.info(f"processing video {video_path}...")
 
+    # target_audio_path = os.path.basename(video_path)
+    # target_audio_path = f"./data-staging/audio/{target_audio_path[:-4]}.wav"
+    #
+    # video_to_audio(video_path, target_audio_path)
+    logger.info(f"slicing and running whisper...")
     audio, sr = librosa.load(audio_path, sr=None, mono=False)
     slicer = Slicer(
         sr=sr,
@@ -51,32 +52,37 @@ def speech_to_text(audio_path, transcript_path):
         hop_size=10,
         max_sil_kept=400,
     )
-    chunks = slicer.slice(audio)
+    chunks = slicer.slice(audio, video_path)
 
-    transcript = ""
+    video_name = os.path.basename(video_path)[:-4]
+    transcripts_output_dir = "./data-staging/transcripts"
+    os.makedirs(transcripts_output_dir, exist_ok=True)
+
     for i, chunk in enumerate(tqdm(chunks, unit="chunk")):
         if len(chunk.shape) > 1:
             chunk = chunk.T
 
-        chunk_path = os.path.join("/tmp", f"{i}.wav")
+        chunk_path = os.path.join("./data-staging", f"{i}.wav")
         soundfile.write(chunk_path, chunk, sr)
-        text = recognize_speech_from_audio(chunk_path)
-        transcript += text
-        transcript += "\n"
-        os.remove(chunk_path)
 
-    with open(transcript_path, "w") as f:
-        f.write(transcript)
+        text = recognize_speech_from_audio(chunk_path)
+
+        with codecs.open(
+            f"{transcripts_output_dir}/{video_name}.txt", "a", "utf-8"
+        ) as f:
+            f.write(text + "\n")
+
+        os.remove(chunk_path)
 
 
 if __name__ == "__main__":
+    """
+    Including speech to text model and translate model
+    """
     all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+    start_process = False
     for v in all_video:
-        logger.info(f"running {v}...")
-        audio_path = f"./data-staging/audio/{v}.wav"
-        transcript_path = f"./data-staging/transcripts/{v}.txt"
-
-        if helpers.is_exits(transcript_path):
-            logger.debug(f"ignore {transcript_path}")
-            continue
-        speech_to_text(audio_path, transcript_path)
+        video_path = f"./datasets/videos/{v}.mp4"
+        print(f"video {v} with path {video_path}")
+        speech_to_text(video_path)
+        # translate(v)

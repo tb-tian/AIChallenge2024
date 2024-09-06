@@ -8,17 +8,17 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
-model, _, preprocess = open_clip.create_model_and_transforms(
+clip_model, _, preprocess = open_clip.create_model_and_transforms(
     "ViT-B-32", pretrained="openai"
 )
-model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
+clip_model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
 
 
 def embedding(pic_path):
     pic = Image.open(pic_path)
     pic = preprocess(pic).unsqueeze(0)
     with torch.no_grad():
-        pic_feat = model.encode_image(pic)
+        pic_feat = clip_model.encode_image(pic)
         pic_feat /= pic_feat.norm(dim=-1, keepdim=True)
     return pic_feat.cpu().numpy()
 
@@ -58,7 +58,7 @@ def main():
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
         np.save(f"./datasets/clip-features/{v}.npy", keyframe_array)
 
-    # Load clip feature into an dictionary of numpy arrays
+    # Load clip feature into a dictionary of numpy arrays
     embedding_dict = {}
     for v in all_video:
         clip_path = f"./datasets/clip-features/{v}.npy"

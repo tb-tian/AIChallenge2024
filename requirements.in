@@ -1,6 +1,6 @@
 streamlit
 numpy
-torch
+torch --index-url https://download.pytorch.org/whl/cu121
 faiss-cpu
 open_clip_torch
 openai-whisper
@@ -12,8 +12,19 @@ easynmt
 openai-whisper
 soundfile
 tensorflow
-
+loguru
+ffmpeg-python
+tqdm
+prefect
 # dev tools 
 black
+isort
 
-    
+# xp
+faster-whisper
+
+# whisperx
+#torch==2.0.0
+#torchvision==0.15.1
+#torchaudio==2.0.1
+#whisperx @ git+https://github.com/m-bain/whisperx.git

@@ -17,22 +17,39 @@ pip install git+https://github.com/chroma-core/chroma.git
 pip install streamlit faiss-cpu open-clip-torch
 ```
 
-## Adding new dependencies
+## Managing dependencies
 
 recommend using https://github.com/astral-sh/uv
+
+```
+# compile 
+uv pip compile requirements.in --output-file requirements.txt
+# sync
+uv pip sync requirements.txt
+```
 
 ## Sample Dataset
 
 Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside `./datasets` directory.
 
 ```
-mkdir datasets
-cd datasets
+mkdir data-source
+cd data-source
 # copy all downloaded data here
 # then unzip all
+# rearrange input data to correct structure
+```
+
+
+```bash
+mkdir data-staging
+mkdir data-staging/audio
+mkdir data-staging/transcripts
+mkdir data-staging/transcripts-en
 ```
 
 your projects structure should look like this
+
 
 ```
 .
@@ -63,9 +80,7 @@ your projects structure should look like this
 ├── vectordb.py
 ├── video_processing.py
 └── web_app.py
-
 ```
-
 
 ## Usage
 

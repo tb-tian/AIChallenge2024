@@ -1,5 +1,10 @@
 datasets
+datasets_*
+data-staging
+data-source
+
 tmp
+app.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -28,6 +33,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.idea
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

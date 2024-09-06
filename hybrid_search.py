@@ -11,9 +11,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 
+from helpers import get_logger
 from loading_dict import create_video_list_and_video_keyframe_dict
 
 all_video, video_keyframe_dict = create_video_list_and_video_keyframe_dict()
+logger = get_logger()
 
 
 def keyframe_querying(query):
