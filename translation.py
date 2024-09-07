@@ -1,10 +1,12 @@
 from easynmt import EasyNMT
 from tqdm import tqdm
+import nltk
 
 import helpers
 from helpers import get_logger, is_on_cpu
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
+nltk.download("punkt_tab")
 
 if is_on_cpu():
     translate_model = EasyNMT("opus-mt")

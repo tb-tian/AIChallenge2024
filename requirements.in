@@ -10,9 +10,10 @@ faiss-cpu
 open_clip_torch
 
 # speech to text
-openai-whisper
+# openai-whisper  # deprecated
 librosa
 easynmt
+langdetect  # lang detect for CPU machine
 soundfile
 ffmpeg-python
 
