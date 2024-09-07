@@ -26,10 +26,6 @@ logger = get_logger()
 def get_kf_index(video, kf) -> Tuple[int, float]:  # frame_idx and start time
     transcript_path = f"./data-staging/audio-chunk-timestamps/{video}.csv"
     map_path = f"./data-source/map-keyframes/{video}.csv"
-    # n,pts_time,fps,frame_idx
-    # 1,0.0,25.0,0
-    # 2,5.0,25.0,125
-    # 3,12.0,25.0,300
     with open(map_path) as map_file, open(transcript_path) as transcript_file:
         # lines = transcript_file.readlines()
         mapping = map_file.readlines()
@@ -74,8 +70,10 @@ if __name__ == "__main__":
     )
 
     search_term = st.text_area("Ask a question here:", height=100)
-    query_id = st.text_input("Unique query id (used for export filename)", value="query-0-kis")
-    button = st.button("SEARCH")
+    query_id = st.text_input(
+        "Unique query id (used for export filename)", value="query-0-kis"
+    )
+    button = st.button("SEARCH", type="primary")
 
     if button:
         with st.spinner("Fetching Answer..."):
@@ -88,27 +86,30 @@ if __name__ == "__main__":
                 search_result = cached.get(search_term)
             else:
                 logger.info("fetch from source")
-                search_result = hibrid_search(
-                    search_term, limit=120
-                )
+                search_result = hibrid_search(search_term, limit=120)
                 # search_result = keyframe_querying(search_term)[:20]
                 cached[search_term] = search_result
 
-
             os.makedirs("tmp/submission", exist_ok=True)
             outpath = f"tmp/submission/{query_id}.csv"
+            is_qa = "qa" in query_id
             with open(outpath, "w") as f:
                 exported_result = search_result[:100]
                 for vid, kf, sim in exported_result:
                     frame_idx, _ = get_kf_index(vid, kf)
-                    f.write(f"{vid},{frame_idx},\n")
-            st.write(f"exported to {outpath} {len(exported_result)} results")
+                    if is_qa:
+                        f.write(f"{vid},{frame_idx},\n")
+                    else:
+                        f.write(f"{vid},{frame_idx}\n")
+
+            st.write(f"exported to {outpath} with {len(exported_result)} results")
             logger.info(f"exported to {outpath}")
-            download = st.download_button(f"Download {outpath}", data=open(outpath), file_name=f"{query_id}.csv")
+            download = st.download_button(
+                f"Download {outpath}", data=open(outpath), file_name=f"{query_id}.csv"
+            )
 
     if search_result:
         col_1, col_2, col_3, col_4 = st.columns(4)
-
 
         for i, (video, kf, similarity) in enumerate(search_result):
             similarity = round(similarity, 5)
@@ -119,14 +120,16 @@ if __name__ == "__main__":
                         caption=similarity,
                         width=WIDTH,
                     )
-                    col_a, col_b = st.columns(2)
-                    with col_a:
-                        if st.button(f"view {video}/{kf}"):
-                            play_dialog(
-                                f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
-                            )
-                    with col_b:
-                        st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+                    if st.button(f"view {video}/{kf}"):
+                        play_dialog(
+                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
+                        )
+                    # st.checkbox(
+                    #     "ok",
+                    #     value=True,
+                    #     key=f"{video}/{kf}",
+                    #     label_visibility="hidden",
+                    #     )
             elif i % 4 == 1:
                 with col_2:
                     st.image(
@@ -138,7 +141,12 @@ if __name__ == "__main__":
                         play_dialog(
                             f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+                    # st.checkbox(
+                    #     "ok",
+                    #     value=True,
+                    #     key=f"{video}/{kf}",
+                    #     label_visibility="hidden",
+                    # )
             elif i % 4 == 2:
                 with col_3:
                     st.image(
@@ -150,7 +158,12 @@ if __name__ == "__main__":
                         play_dialog(
                             f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+                    # st.checkbox(
+                    #     "ok",
+                    #     value=True,
+                    #     key=f"{video}/{kf}",
+                    #     label_visibility="hidden",
+                    # )
             else:
                 with col_4:
                     st.image(
@@ -162,6 +175,11 @@ if __name__ == "__main__":
                         play_dialog(
                             f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+                    # st.checkbox(
+                    #     "ok",
+                    #     value=True,
+                    #     key=f"{video}/{kf}",
+                    #     label_visibility="hidden",
+                    # )
     else:
         st.text("search_result elem not available")
