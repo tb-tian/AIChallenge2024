@@ -4,9 +4,10 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 
+from helpers import get_logger
 from hybrid_search import hibrid_search, keyframe_querying
 from vectordb import VectorDB
-from helpers import get_logger
+
 WIDTH = 350
 
 if "cached" not in st.session_state:
@@ -18,6 +19,7 @@ if "search_result" not in st.session_state:
 search_result = st.session_state["search_result"]
 
 logger = get_logger()
+
 
 @st.dialog("Playing source video")
 def play_dialog(video, kf):
@@ -36,7 +38,8 @@ def play_dialog(video, kf):
     # print(start, end)
     # st.write(f"{video}, {frame_idx}")
     st.video(
-        f"./data-source/videos/{video}.mp4", autoplay=True,
+        f"./data-source/videos/{video}.mp4",
+        autoplay=True,
     )
 
 
@@ -75,7 +78,6 @@ if __name__ == "__main__":
                     # search_result = keyframe_querying(search_term)[:20]
                     cached[search_term] = search_result
 
-
         if search_result:
             col1, col2, col3, col4 = st.columns(4)
 
@@ -85,19 +87,27 @@ if __name__ == "__main__":
                 if i % 4 == 0:
                     with col1:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
-                       
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
+
                 elif i % 4 == 1:
                     with col2:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
 
                 elif i % 4 == 2:
                     with col3:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
 
                 else:
                     with col4:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )

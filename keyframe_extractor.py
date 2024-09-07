@@ -6,8 +6,8 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
+from legacy.transnetv2 import TransNetV2
 from load_all_video_keyframes_info import load_all_video_keyframes_info
-from transnetv2 import TransNetV2
 
 all_video, video_keyframe_dict = load_all_video_keyframes_info()
 

@@ -2,6 +2,8 @@
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly recommend using python package manager like [conda](https://docs.conda.io/en/latest/)
 
+Tested on python 3.10
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -75,7 +77,7 @@ mkdir data-staging/clip-features
 ```
 
 3. data-index: artifact of index process go here
-```commandline
+```bash
 mkdir data-index
 ```
 

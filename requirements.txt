@@ -15,10 +15,14 @@ alembic==1.13.2
     # via optuna
 altair==5.4.0
     # via streamlit
+annotated-types==0.7.0
+    # via pydantic
 antlr4-python3-runtime==4.9.3
     # via omegaconf
 asteroid-filterbanks==0.4.0
     # via pyannote-audio
+asttokens==2.4.1
+    # via stack-data
 astunparse==1.6.3
     # via tensorflow
 async-timeout==4.0.3
@@ -34,36 +38,71 @@ av==11.0.0
     # via faster-whisper
 black==24.8.0
     # via -r requirements.in
+bleach==6.1.0
+    # via kaggle
 blinker==1.8.2
     # via streamlit
+blis==0.7.11
+    # via thinc
+braceexpand==0.1.7
+    # via webdataset
 cachetools==5.4.0
     # via streamlit
+catalogue==2.0.10
+    # via
+    #   spacy
+    #   srsly
+    #   thinc
 certifi==2024.7.4
-    # via requests
+    # via
+    #   kaggle
+    #   requests
 cffi==1.17.0
     # via soundfile
+cfgv==3.4.0
+    # via pre-commit
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via
     #   black
     #   nltk
+    #   opendatasets
     #   streamlit
     #   typer
+cloudpathlib==0.19.0
+    # via weasel
 cmake==3.30.2
     # via triton
 coloredlogs==15.0.1
     # via onnxruntime
 colorlog==6.8.2
     # via optuna
+confection==0.1.5
+    # via
+    #   thinc
+    #   weasel
+contexttimer==0.3.3
+    # via salesforce-lavis
 contourpy==1.3.0
     # via matplotlib
 ctranslate2==4.3.1
     # via faster-whisper
 cycler==0.12.1
     # via matplotlib
+cymem==2.0.8
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
 decorator==5.1.1
-    # via librosa
+    # via
+    #   ipython
+    #   librosa
+decord==0.6.0
+    # via salesforce-lavis
+distlib==0.3.8
+    # via virtualenv
 docopt==0.6.2
     # via
     #   pyannote-metrics
@@ -71,7 +110,15 @@ docopt==0.6.2
 easynmt==2.0.2
     # via -r requirements.in
 einops==0.8.0
-    # via pyannote-audio
+    # via
+    #   pyannote-audio
+    #   salesforce-lavis
+exceptiongroup==1.2.2
+    # via ipython
+executing==2.1.0
+    # via stack-data
+fairscale==0.4.4
+    # via salesforce-lavis
 faiss-cpu==1.8.0.post1
     # via -r requirements.in
 faster-whisper==1.0.0
@@ -89,6 +136,7 @@ filelock==3.15.4
     #   torch
     #   transformers
     #   triton
+    #   virtualenv
 flatbuffers==24.3.25
     # via
     #   onnxruntime
@@ -105,7 +153,9 @@ fsspec==2024.6.1
     #   lightning
     #   pytorch-lightning
 ftfy==6.2.3
-    # via open-clip-torch
+    # via
+    #   open-clip-torch
+    #   salesforce-lavis
 future==1.0.0
     # via ffmpeg-python
 gast==0.6.0
@@ -132,23 +182,32 @@ huggingface-hub==0.24.5
     #   open-clip-torch
     #   pyannote-audio
     #   speechbrain
-    #   timm
-    #   tokenizers
     #   transformers
 humanfriendly==10.0
     # via coloredlogs
 hyperpyyaml==1.2.2
     # via speechbrain
+identify==2.6.0
+    # via pre-commit
 idna==3.7
     # via
     #   requests
     #   yarl
+imageio==2.35.1
+    # via scikit-image
+iopath==0.1.10
+    # via salesforce-lavis
+ipython==8.27.0
+    # via salesforce-lavis
 isort==5.13.2
     # via -r requirements.in
+jedi==0.19.1
+    # via ipython
 jinja2==3.1.4
     # via
     #   altair
     #   pydeck
+    #   spacy
     #   torch
 joblib==1.4.2
     # via
@@ -162,12 +221,20 @@ jsonschema-specifications==2023.12.1
     # via jsonschema
 julius==0.2.7
     # via torch-audiomentations
+kaggle==1.6.17
+    # via opendatasets
 keras==3.5.0
     # via tensorflow
 kiwisolver==1.4.7
     # via matplotlib
+langcodes==3.4.0
+    # via spacy
+language-data==1.2.0
+    # via langcodes
 lazy-loader==0.4
-    # via librosa
+    # via
+    #   librosa
+    #   scikit-image
 libclang==18.1.1
     # via tensorflow
 librosa==0.10.2.post1
@@ -189,6 +256,8 @@ loguru==0.7.2
     # via -r requirements.in
 mako==1.3.5
     # via alembic
+marisa-trie==1.2.0
+    # via language-data
 markdown==3.7
     # via tensorboard
 markdown-it-py==3.0.0
@@ -199,7 +268,11 @@ markupsafe==2.1.5
     #   mako
     #   werkzeug
 matplotlib==3.9.2
-    # via pyannote-metrics
+    # via
+    #   pyannote-metrics
+    #   pycocotools
+matplotlib-inline==0.1.7
+    # via ipython
 mdurl==0.1.2
     # via markdown-it-py
 ml-dtypes==0.4.0
@@ -216,6 +289,11 @@ multidict==6.0.5
     # via
     #   aiohttp
     #   yarl
+murmurhash==1.0.10
+    # via
+    #   preshed
+    #   spacy
+    #   thinc
 mypy-extensions==1.0.0
     # via black
 namex==0.0.8
@@ -223,11 +301,15 @@ namex==0.0.8
 narwhals==1.3.0
     # via altair
 networkx==3.3
-    # via torch
+    # via
+    #   scikit-image
+    #   torch
 nltk==3.9.1
     # via
     #   easynmt
     #   whisperx
+nodeenv==1.9.1
+    # via pre-commit
 numba==0.60.0
     # via
     #   librosa
@@ -236,12 +318,15 @@ numpy==1.26.4
     # via
     #   -r requirements.in
     #   asteroid-filterbanks
+    #   blis
     #   contourpy
     #   ctranslate2
+    #   decord
     #   easynmt
     #   faiss-cpu
     #   fasttext
     #   h5py
+    #   imageio
     #   keras
     #   librosa
     #   lightning
@@ -250,27 +335,33 @@ numpy==1.26.4
     #   numba
     #   onnxruntime
     #   openai-whisper
-    #   opencv-python
+    #   opencv-python-headless
     #   opt-einsum
     #   optuna
     #   pandas
     #   pyannote-core
     #   pyannote-metrics
     #   pyarrow
+    #   pycocotools
     #   pydeck
     #   pytorch-lightning
     #   pytorch-metric-learning
+    #   scikit-image
     #   scikit-learn
     #   scipy
     #   soxr
+    #   spacy
     #   speechbrain
     #   streamlit
     #   tensorboard
     #   tensorboardx
     #   tensorflow
+    #   thinc
+    #   tifffile
     #   torchmetrics
     #   torchvision
     #   transformers
+    #   webdataset
 nvidia-cublas-cu11==11.10.3.66
     # via
     #   nvidia-cudnn-cu11
@@ -297,15 +388,19 @@ nvidia-nccl-cu11==2.14.3
 nvidia-nvtx-cu11==11.7.91
     # via torch
 omegaconf==2.3.0
-    # via pyannote-audio
+    # via
+    #   pyannote-audio
+    #   salesforce-lavis
 onnxruntime==1.19.2
     # via faster-whisper
 open-clip-torch==2.26.1
     # via -r requirements.in
 openai-whisper==20230306
     # via -r requirements.in
-opencv-python==4.10.0.84
-    # via -r requirements.in
+opencv-python-headless==4.5.5.64
+    # via salesforce-lavis
+opendatasets==0.1.22
+    # via salesforce-lavis
 opt-einsum==3.3.0
     # via tensorflow
 optree==0.12.1
@@ -325,37 +420,63 @@ packaging==24.1
     #   matplotlib
     #   onnxruntime
     #   optuna
+    #   plotly
     #   pooch
     #   pytorch-lightning
+    #   salesforce-lavis
+    #   scikit-image
+    #   spacy
     #   speechbrain
     #   streamlit
     #   tensorboard
     #   tensorboardx
     #   tensorflow
+    #   thinc
     #   torch-pitch-shift
     #   torchmetrics
     #   transformers
+    #   weasel
 pandas==2.2.2
     # via
     #   pyannote-database
     #   pyannote-metrics
+    #   salesforce-lavis
     #   streamlit
     #   whisperx
+parso==0.8.4
+    # via jedi
 pathspec==0.12.1
     # via black
+pexpect==4.9.0
+    # via ipython
 pillow==10.4.0
     # via
+    #   imageio
     #   matplotlib
+    #   scikit-image
     #   streamlit
     #   torchvision
 platformdirs==4.2.2
     # via
     #   black
     #   pooch
+    #   virtualenv
+plotly==5.24.0
+    # via salesforce-lavis
 pooch==1.8.2
     # via librosa
+portalocker==2.10.1
+    # via iopath
+pre-commit==3.8.0
+    # via salesforce-lavis
+preshed==3.0.9
+    # via
+    #   spacy
+    #   thinc
 primepy==1.3
     # via torch-pitch-shift
+prompt-toolkit==3.0.47
+    # via ipython
 protobuf==4.25.4
     # via
     #   easynmt
@@ -364,6 +485,10 @@ protobuf==4.25.4
     #   tensorboard
     #   tensorboardx
     #   tensorflow
+ptyprocess==0.7.0
+    # via pexpect
+pure-eval==0.2.3
+    # via stack-data
 pyannote-audio==3.1.1
     # via whisperx
 pyannote-core==5.0.0
@@ -385,18 +510,39 @@ pyarrow==17.0.0
     # via streamlit
 pybind11==2.13.5
     # via fasttext
+pycocoevalcap==1.2
+    # via salesforce-lavis
+pycocotools==2.0.8
+    # via
+    #   pycocoevalcap
+    #   salesforce-lavis
 pycparser==2.22
     # via cffi
+pydantic==2.9.0
+    # via
+    #   confection
+    #   spacy
+    #   thinc
+    #   weasel
+pydantic-core==2.23.2
+    # via pydantic
 pydeck==0.9.1
     # via streamlit
 pygments==2.18.0
-    # via rich
+    # via
+    #   ipython
+    #   rich
 pyparsing==3.1.4
     # via matplotlib
 python-dateutil==2.9.0.post0
     # via
+    #   kaggle
     #   matplotlib
     #   pandas
+python-magic==0.4.27
+    # via salesforce-lavis
+python-slugify==8.0.4
+    # via kaggle
 pytorch-lightning==2.3.3
     # via lightning
 pytorch-metric-learning==2.6.0
@@ -411,11 +557,12 @@ pyyaml==6.0.2
     #   lightning
     #   omegaconf
     #   optuna
+    #   pre-commit
     #   pyannote-database
     #   pyannote-pipeline
     #   pytorch-lightning
-    #   timm
     #   transformers
+    #   webdataset
 referencing==0.35.1
     # via
     #   jsonschema
@@ -428,11 +575,14 @@ regex==2024.7.24
 requests==2.32.3
     # via
     #   huggingface-hub
+    #   kaggle
     #   pooch
+    #   spacy
     #   streamlit
     #   tensorflow
     #   torchvision
     #   transformers
+    #   weasel
 rich==13.7.1
     # via
     #   keras
@@ -447,10 +597,10 @@ ruamel-yaml==0.18.6
     # via hyperpyyaml
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
-safetensors==0.4.4
-    # via
-    #   timm
-    #   transformers
+salesforce-lavis==1.0.2
+    # via -r requirements.in
+scikit-image==0.24.0
+    # via salesforce-lavis
 scikit-learn==1.5.1
     # via
     #   librosa
@@ -462,6 +612,7 @@ scipy==1.14.1
     #   librosa
     #   pyannote-core
     #   pyannote-metrics
+    #   scikit-image
     #   scikit-learn
     #   speechbrain
 semver==3.0.2
@@ -469,30 +620,39 @@ semver==3.0.2
 sentencepiece==0.2.0
     # via
     #   easynmt
+    #   salesforce-lavis
     #   speechbrain
 setuptools==74.1.2
     # via
     #   ctranslate2
     #   fasttext
     #   lightning-utilities
+    #   marisa-trie
     #   nvidia-cublas-cu11
     #   nvidia-cuda-cupti-cu11
     #   nvidia-cuda-runtime-cu11
     #   nvidia-curand-cu11
     #   nvidia-cusparse-cu11
     #   nvidia-nvtx-cu11
+    #   spacy
     #   tensorboard
     #   tensorflow
+    #   thinc
     #   whisperx
 shellingham==1.5.4
     # via typer
 six==1.16.0
     # via
+    #   asttokens
     #   astunparse
+    #   bleach
     #   google-pasta
+    #   kaggle
     #   python-dateutil
     #   tensorboard
     #   tensorflow
+smart-open==7.0.4
+    # via weasel
 smmap==5.0.1
     # via gitdb
 sortedcontainers==2.4.0
@@ -504,14 +664,30 @@ soundfile==0.12.1
     #   pyannote-audio
 soxr==0.5.0
     # via librosa
+spacy==3.7.6
+    # via salesforce-lavis
+spacy-legacy==3.0.12
+    # via spacy
+spacy-loggers==1.0.5
+    # via spacy
 speechbrain==1.0.1
     # via pyannote-audio
 sqlalchemy==2.0.34
     # via
     #   alembic
     #   optuna
+srsly==2.4.8
+    # via
+    #   confection
+    #   spacy
+    #   thinc
+    #   weasel
+stack-data==0.6.3
+    # via ipython
 streamlit==1.38.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   salesforce-lavis
 sympy==1.13.2
     # via
     #   onnxruntime
@@ -520,7 +696,9 @@ sympy==1.13.2
 tabulate==0.9.0
     # via pyannote-metrics
 tenacity==8.5.0
-    # via streamlit
+    # via
+    #   plotly
+    #   streamlit
 tensorboard==2.17.1
     # via tensorflow
 tensorboard-data-server==0.7.2
@@ -533,11 +711,19 @@ tensorflow-io-gcs-filesystem==0.37.1
     # via tensorflow
 termcolor==2.4.0
     # via tensorflow
+text-unidecode==1.3
+    # via python-slugify
+thinc==8.2.5
+    # via spacy
 threadpoolctl==3.5.0
     # via scikit-learn
-timm==1.0.8
-    # via open-clip-torch
-tokenizers==0.15.2
+tifffile==2024.8.30
+    # via scikit-image
+timm==0.4.12
+    # via
+    #   open-clip-torch
+    #   salesforce-lavis
+tokenizers==0.13.3
     # via
     #   faster-whisper
     #   transformers
@@ -550,6 +736,7 @@ torch==2.0.0
     #   -r requirements.in
     #   asteroid-filterbanks
     #   easynmt
+    #   fairscale
     #   julius
     #   lightning
     #   open-clip-torch
@@ -557,6 +744,7 @@ torch==2.0.0
     #   pyannote-audio
     #   pytorch-lightning
     #   pytorch-metric-learning
+    #   salesforce-lavis
     #   speechbrain
     #   timm
     #   torch-audiomentations
@@ -587,6 +775,7 @@ torchvision==0.15.1
     # via
     #   -r requirements.in
     #   open-clip-torch
+    #   salesforce-lavis
     #   timm
 tornado==6.4.1
     # via streamlit
@@ -595,39 +784,57 @@ tqdm==4.66.5
     #   -r requirements.in
     #   easynmt
     #   huggingface-hub
+    #   iopath
+    #   kaggle
     #   lightning
     #   nltk
     #   open-clip-torch
     #   openai-whisper
+    #   opendatasets
     #   optuna
     #   pyannote-pipeline
     #   pytorch-lightning
     #   pytorch-metric-learning
+    #   salesforce-lavis
+    #   spacy
     #   speechbrain
     #   transformers
-transformers==4.39.3
+traitlets==5.14.3
+    # via
+    #   ipython
+    #   matplotlib-inline
+transformers==4.26.1
     # via
     #   easynmt
     #   openai-whisper
+    #   salesforce-lavis
     #   whisperx
 triton==2.0.0
     # via
     #   openai-whisper
     #   torch
 typer==0.12.5
-    # via pyannote-database
+    # via
+    #   pyannote-database
+    #   spacy
+    #   weasel
 typing-extensions==4.12.2
     # via
     #   alembic
     #   altair
     #   asteroid-filterbanks
     #   black
+    #   cloudpathlib
     #   huggingface-hub
+    #   iopath
+    #   ipython
     #   librosa
     #   lightning
     #   lightning-utilities
     #   optree
     #   pyannote-core
+    #   pydantic
+    #   pydantic-core
     #   pytorch-lightning
     #   sqlalchemy
     #   streamlit
@@ -635,13 +842,32 @@ typing-extensions==4.12.2
     #   torch
     #   typer
 tzdata==2024.1
-    # via pandas
+    # via
+    #   pandas
+    #   pydantic
 urllib3==2.2.2
-    # via requests
+    # via
+    #   kaggle
+    #   requests
+virtualenv==20.26.3
+    # via pre-commit
+wasabi==1.1.3
+    # via
+    #   spacy
+    #   thinc
+    #   weasel
 watchdog==4.0.2
     # via streamlit
 wcwidth==0.2.13
-    # via ftfy
+    # via
+    #   ftfy
+    #   prompt-toolkit
+weasel==0.4.1
+    # via spacy
+webdataset==0.2.100
+    # via salesforce-lavis
+webencodings==0.5.1
+    # via bleach
 werkzeug==3.0.4
     # via tensorboard
 wheel==0.44.0
@@ -653,9 +879,12 @@ wheel==0.44.0
     #   nvidia-curand-cu11
     #   nvidia-cusparse-cu11
     #   nvidia-nvtx-cu11
+    #   salesforce-lavis
 whisperx @ git+https://github.com/m-bain/whisperx.git@9e3a9e0e38fcec1304e1784381059a0e2c670be5
     # via -r requirements.in
 wrapt==1.16.0
-    # via tensorflow
+    # via
+    #   smart-open
+    #   tensorflow
 yarl==1.9.11
     # via aiohttp

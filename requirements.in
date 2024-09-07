@@ -4,7 +4,7 @@ torch
 tensorflow
 
 faiss-cpu
-opencv-python
+# opencv-python
 
 # CLIP
 open_clip_torch
@@ -29,3 +29,5 @@ whisperx @ git+https://github.com/m-bain/whisperx.git
 # tool
 loguru
 tqdm
+
+salesforce-lavis
