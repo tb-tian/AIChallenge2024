@@ -7,7 +7,6 @@ import tensorflow as tf
 
 
 class TransNetV2:
-
     def __init__(self, model_dir=None):
         if model_dir is None:
             model_dir = os.path.join(os.path.dirname(__file__), "transnetv2-weights/")

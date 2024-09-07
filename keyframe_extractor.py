@@ -26,9 +26,11 @@ def segmentation():
                 file=sys.stderr,
             )
 
-        video_frames, single_frame_predictions, all_frame_predictions = (
-            model.predict_video(file)
-        )
+        (
+            video_frames,
+            single_frame_predictions,
+            all_frame_predictions,
+        ) = model.predict_video(file)
 
         predictions = np.stack([single_frame_predictions, all_frame_predictions], 1)
         np.savetxt(destination + f"{v}_predictions.txt", predictions, fmt="%.6f")

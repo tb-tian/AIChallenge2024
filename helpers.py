@@ -40,5 +40,6 @@ def is_on_cpu() -> bool:
     logger.warning("RUNNING ON CPU!!!")
     return os.getenv("USE_CPU") == "true"
 
+
 def get_logger() -> loguru.logger:
     return logger

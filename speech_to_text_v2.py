@@ -14,7 +14,7 @@ logger = get_logger()
 
 if is_on_cpu():
     batch_size = 4
-    whisperx_model = whisperx.load_model(   
+    whisperx_model = whisperx.load_model(
         "base", "cpu", compute_type="int8", language="vi"
     )
 else:

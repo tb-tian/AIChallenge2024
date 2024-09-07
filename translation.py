@@ -7,7 +7,7 @@ from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 
 if is_on_cpu():
-        translate_model = EasyNMT("opus-mt")
+    translate_model = EasyNMT("opus-mt")
 else:
     translate_model = EasyNMT("m2m_100_418M")
 
