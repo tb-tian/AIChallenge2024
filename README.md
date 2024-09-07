@@ -151,10 +151,5 @@ isort .
 
 # run on CPU
 
-by default, this will leverage GPU (NVIDIA) computing power, but if you want to experiment on CPU machine, ensure having this envvar when runnning
-
-
-```bash
-export USE_CPU=true
-```
+best is to use with GPU (NVIDIA) machine, but if you want to experiment on CPU machine, by default it will try to check `torch.cuda.is_available()` and use the suitable model 
 
