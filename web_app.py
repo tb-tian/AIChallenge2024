@@ -1,4 +1,6 @@
 import csv
+import os
+from typing import Tuple
 
 import numpy as np
 import streamlit as st
@@ -21,26 +23,37 @@ search_result = st.session_state["search_result"]
 logger = get_logger()
 
 
-@st.dialog("Playing source video")
-def play_dialog(video, kf):
-    st.write(f"{video} - {kf}")
-
-    # txt_path = f"./data-staging/transcripts/{video}.txt"
-    # map_path = f"./data-source/map-keyframes/{video}.csv"
-    # with open(txt_path) as file, open(map_path) as map_file:
-    #     lines = file.readlines()
-    #     mapping = map_file.readlines()
-    #     kf = int(kf)
-    #     start, end = lines[kf - 1].split(" ")
-    #     n, pts_time, fps, frame_idx = mapping[kf].split(",")
+def get_kf_index(video, kf) -> Tuple[int, float]:  # frame_idx and start time
+    transcript_path = f"./data-staging/audio-chunk-timestamps/{video}.csv"
+    map_path = f"./data-source/map-keyframes/{video}.csv"
+    # n,pts_time,fps,frame_idx
+    # 1,0.0,25.0,0
+    # 2,5.0,25.0,125
+    # 3,12.0,25.0,300
+    with open(map_path) as map_file, open(transcript_path) as transcript_file:
+        # lines = transcript_file.readlines()
+        mapping = map_file.readlines()
+        kf = int(kf)
+        # start, end = lines[1:][kf - 1].split(",")
+        n, pts_time, fps, frame_idx = mapping[kf].split(",")
     # start = int(start) / float(fps)
     # end = int(end) / float(fps)
     # print(start, end)
-    # st.write(f"{video}, {frame_idx}")
+    return int(frame_idx), float(pts_time)
+
+
+@st.dialog("Playing source video")
+def play_dialog(img_source, video, kf):
+    print(f"popup load ./data-source/videos/{video}.mp4", img_source, video, kf)
+    frame_idx, pts_time = get_kf_index(video, kf)
+    st.write(f"video: {video}, keyframe: {kf}, video start: {pts_time}")
+    st.image(img_source)
     st.video(
         f"./data-source/videos/{video}.mp4",
+        start_time=pts_time - 1,  # start 1 sec sooner
         autoplay=True,
     )
+    print("POPup closed")
 
 
 if __name__ == "__main__":
@@ -60,54 +73,95 @@ if __name__ == "__main__":
         "Welcome to TIAN Video Search. You can blah blah blah here. And blah blah blah there also."
     )
 
-    with st.container():
-        search_term = st.text_area("Ask a question here:", height=100, key="query_text")
-        button = st.button("Submit", key="button")
-        if button:
-            with st.spinner("Fetching Answer..."):
-                search_term = search_term.strip()
-                # play("video", "kf")
-                logger.info("searching...", search_term)
+    search_term = st.text_area("Ask a question here:", height=100)
+    query_id = st.text_input("Unique query id (used for export filename)", value="query-0-kis")
+    button = st.button("SEARCH")
 
-                if cached.get(search_term):
-                    logger.info("fetch from cache")
-                    search_result = cached.get(search_term)
-                else:
-                    logger.info("fetch from source")
-                    search_result = hibrid_search(search_term)
-                    # search_result = keyframe_querying(search_term)[:20]
-                    cached[search_term] = search_result
+    if button:
+        with st.spinner("Fetching Answer..."):
+            search_term = search_term.strip()
+            # play("video", "kf")
+            logger.info("searching...", search_term)
 
-        if search_result:
-            col1, col2, col3, col4 = st.columns(4)
+            if cached.get(search_term):
+                logger.info("fetch from cache")
+                search_result = cached.get(search_term)
+            else:
+                logger.info("fetch from source")
+                search_result = hibrid_search(
+                    search_term, limit=120
+                )
+                # search_result = keyframe_querying(search_term)[:20]
+                cached[search_term] = search_result
 
-            for i, (video, kf, similarity) in enumerate(search_result):
-                similarity = round(similarity, 5)
-                file_path = f"./data-source/keyframes/{video}/{kf}.jpg"
-                if i % 4 == 0:
-                    with col1:
-                        st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(
-                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+
+            os.makedirs("tmp/submission", exist_ok=True)
+            outpath = f"tmp/submission/{query_id}.csv"
+            with open(outpath, "w") as f:
+                exported_result = search_result[:100]
+                for vid, kf, sim in exported_result:
+                    frame_idx, _ = get_kf_index(vid, kf)
+                    f.write(f"{vid},{frame_idx},\n")
+            st.write(f"exported to {outpath} {len(exported_result)} results")
+            logger.info(f"exported to {outpath}")
+            download = st.download_button(f"Download {outpath}", data=open(outpath), file_name=f"{query_id}.csv")
+
+    if search_result:
+        col_1, col_2, col_3, col_4 = st.columns(4)
+
+
+        for i, (video, kf, similarity) in enumerate(search_result):
+            similarity = round(similarity, 5)
+            if i % 4 == 0:
+                with col_1:
+                    st.image(
+                        f"./data-source/keyframes/{video}/{kf}.jpg",
+                        caption=similarity,
+                        width=WIDTH,
+                    )
+                    col_a, col_b = st.columns(2)
+                    with col_a:
+                        if st.button(f"view {video}/{kf}"):
+                            play_dialog(
+                                f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
+                            )
+                    with col_b:
+                        st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+            elif i % 4 == 1:
+                with col_2:
+                    st.image(
+                        f"./data-source/keyframes/{video}/{kf}.jpg",
+                        caption=similarity,
+                        width=WIDTH,
+                    )
+                    if st.button(f"view {video}/{kf}"):
+                        play_dialog(
+                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-
-                elif i % 4 == 1:
-                    with col2:
-                        st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(
-                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+            elif i % 4 == 2:
+                with col_3:
+                    st.image(
+                        f"./data-source/keyframes/{video}/{kf}.jpg",
+                        caption=similarity,
+                        width=WIDTH,
+                    )
+                    if st.button(f"view {video}/{kf}"):
+                        play_dialog(
+                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-
-                elif i % 4 == 2:
-                    with col3:
-                        st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(
-                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+            else:
+                with col_4:
+                    st.image(
+                        f"./data-source/keyframes/{video}/{kf}.jpg",
+                        caption=similarity,
+                        width=WIDTH,
+                    )
+                    if st.button(f"view {video}/{kf}"):
+                        play_dialog(
+                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
                         )
-
-                else:
-                    with col4:
-                        st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(
-                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
-                        )
+                    st.checkbox("ok", value=True, key=f"{video}/{kf}", label_visibility="hidden")
+    else:
+        st.text("search_result elem not available")

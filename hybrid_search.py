@@ -83,8 +83,6 @@ def document_querying(query):
             if video not in result:
                 result[video] = {}
             result[video][kf] = score
-            # if video == 'L01_V013':
-            #     print(video, kf)
 
     return result
 
