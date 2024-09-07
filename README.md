@@ -4,6 +4,15 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install. Highly
 
 Tested on python 3.10
 
+(optional for conda user)
+
+```bash
+conda create -n AIChallenge2024 python=3.10
+conda activate AIChallenge2024
+```
+
+install all requirements
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -58,7 +67,7 @@ tree -L 2 -l .
 ```
 
 1. data-source: read only folder, source data should be placed here
-```
+```bash
 mkdir data-source
 # copy all downloaded data here
 # then unzip all
