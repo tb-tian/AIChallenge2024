@@ -2,10 +2,15 @@ from easynmt import EasyNMT
 from tqdm import tqdm
 
 import helpers
-from helpers import get_logger
+from helpers import get_logger, is_on_cpu
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
-translate_model = EasyNMT("m2m_100_418M")
+
+if is_on_cpu():
+        translate_model = EasyNMT("opus-mt")
+else:
+    translate_model = EasyNMT("m2m_100_418M")
+
 
 logger = get_logger()
 

@@ -1,3 +1,5 @@
+mkdir -p data-source
+
 mkdir -p data-index
 
 mkdir -p data-staging/audio

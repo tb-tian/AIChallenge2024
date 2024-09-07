@@ -148,3 +148,13 @@ isort .
 
 ./format-code.sh
 ```
+
+# run on CPU
+
+by default, this will leverage GPU (NVIDIA) computing power, but if you want to experiment on CPU machine, ensure having this envvar when runnning
+
+
+```bash
+export USE_CPU=true
+```
+

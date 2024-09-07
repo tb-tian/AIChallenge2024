@@ -1,3 +1,4 @@
+import os
 import pathlib
 import sys
 
@@ -34,6 +35,10 @@ def is_exits(fp) -> bool:
     p = pathlib.Path(fp)
     return p.is_file()
 
+
+def is_on_cpu() -> bool:
+    logger.warning("RUNNING ON CPU!!!")
+    return os.getenv("USE_CPU") == "true"
 
 def get_logger() -> loguru.logger:
     return logger
