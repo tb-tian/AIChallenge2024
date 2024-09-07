@@ -17,6 +17,8 @@ install all requirements
 pip install -r requirements.txt
 ```
 
+optional faster mirror: https://gist.github.com/schnell18/d0ed716917905d2c142a370906cfa32f
+    
 ## Managing dependencies
 
 recommend using https://github.com/astral-sh/uv

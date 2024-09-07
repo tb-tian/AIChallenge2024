@@ -6,7 +6,6 @@ from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 translate_model = EasyNMT("m2m_100_418M")
-# translate_model = EasyNMT("opus-mt")
 
 logger = get_logger()
 
