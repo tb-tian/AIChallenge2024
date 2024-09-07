@@ -510,7 +510,7 @@ sqlalchemy==2.0.34
     # via
     #   alembic
     #   optuna
-streamlit==1.37.1
+streamlit==1.38.0
     # via -r requirements.in
 sympy==1.13.2
     # via
