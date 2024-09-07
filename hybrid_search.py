@@ -10,6 +10,7 @@ from scipy.sparse import load_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
+from tqdm import tqdm
 
 from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
@@ -62,7 +63,7 @@ def document_querying(query):
     tfidf_matrix = load_npz("./data-index/tfidf_matrix.npz")
     vectorizer = joblib.load("./data-index/tfidf_vectorizer.pkl")
     embedding_info = joblib.load("./data-index/document_embedding_info.pkl")
-    mapping_df = pd.read_csv("./datasets/mapping.csv", dtype={"keyframe": str})
+    mapping_df = pd.read_csv("./data-index/mapping.csv", dtype={"keyframe": str})
 
     print(f"loaded {tfidf_matrix.shape} documents")
 
@@ -103,8 +104,10 @@ def sort_results(result):
     return ranked_results
 
 
-def query(query, limit):
+def hibrid_search(query, limit=20):
+    logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
+    logger.debug(f"document_querying: {query}")
     doc_res = document_querying(query)
 
     ranked_kf_res = sort_results(kf_res)
@@ -134,11 +137,21 @@ def query(query, limit):
     #     for kf in video_keyframe_dict[v]:
     #         print(ranked_kf_dic[v][kf], ranked_doc_dic[v][kf])
 
+    logger.debug("rerank")
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
+            if ranked_kf_dic[v].get(kf) is None:
+                continue
+            if ranked_doc_dic[v].get(kf) is None:
+                continue
             rerank.append(
-                (v, kf, 0.7 / ranked_kf_dic[v][kf] + 0.3 / ranked_doc_dic[v][kf])
+                (
+                    v,
+                    kf,
+                    0.7 / ranked_kf_dic[v].get(kf, 0)
+                    + 0.3 / ranked_doc_dic[v].get(kf, 0),
+                )
             )
             # rerank.append((v, kf, kf_res[v][kf]))
 
@@ -154,4 +167,11 @@ def query(query, limit):
 
 
 if __name__ == "__main__":
-    query("car", 10)
+    res = hibrid_search("car", 20)
+    print(res)
+
+    for video, keyframe, similarity in res:
+        file_path = f"./data-source/keyframes/{video}/{keyframe}.jpg"
+        image = Image.open(file_path)
+        image.show()
+        print(f"Video: {video}, Keyframe: {keyframe}, Similarity: {similarity}")

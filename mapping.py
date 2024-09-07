@@ -1,4 +1,5 @@
 import csv
+import math
 import os
 
 from helpers import get_logger
@@ -8,15 +9,16 @@ all_video, video_keyframe_dict = load_all_video_keyframes_info()
 logger = get_logger()
 
 
+# TODO: check round up! timestamp
 def mapping_from_keyframe_to_audio_chunk(video_id):
     # determine which audio chunk would the keyframe belongs to
     keyframe_path = f"./data-source/map-keyframes/{video_id}.csv"
     chunk_path = f"./data-staging/audio-chunk-timestamps/{video_id}.csv"
-    tmp_mapping_path = "/tmp/mapping.csv"
+    tmp_vid_mapping = "/tmp/mapping.csv"
     video_keyframe_chunk_dict = {video_id: {}}
 
     with open(keyframe_path) as keyframe_file, open(chunk_path) as chunk_file, open(
-        tmp_mapping_path, "w"
+        tmp_vid_mapping, "w"
     ) as mapping_file:
         keyframe_time = csv.reader(keyframe_file)
         chunk_time = csv.reader(chunk_file)
@@ -29,11 +31,12 @@ def mapping_from_keyframe_to_audio_chunk(video_id):
         chunk_time = list(chunk_time)
         mapping.writerow(["keyframe_id", "chunk"])
 
-        for row1 in keyframe_time:
-            n, pts_time, _, _ = row1
+        for kf_row in keyframe_time:
+            n, pts_time, _, _ = kf_row
             pts_time = float(pts_time)
-            for i, row2 in enumerate(chunk_time):
-                start_time, end_time = map(float, row2)
+
+            for i, ch_row in enumerate(chunk_time):
+                start_time, end_time = map(float, ch_row)
                 if start_time <= pts_time and pts_time <= end_time:
                     mapping.writerow([n, i])
                     video_keyframe_chunk_dict[video_id][
@@ -47,7 +50,7 @@ def mapping_from_keyframe_to_audio_chunk(video_id):
                     ] = (i - 1)
                     break
 
-    os.remove(tmp_mapping_path)
+    os.remove(tmp_vid_mapping)
     return video_keyframe_chunk_dict
 
 

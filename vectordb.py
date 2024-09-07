@@ -5,7 +5,7 @@ import faiss
 import numpy as np
 import open_clip
 
-from hybrid_search import query
+from hybrid_search import hibrid_search
 
 
 class VectorDB:
@@ -19,13 +19,13 @@ class VectorDB:
         self.model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
         self.tokenizer = open_clip.get_tokenizer("ViT-B-32")
         # Load the indexing database and embedding info
-        self.index = faiss.read_index("./datasets/embedding.index")
-        self.embedding_info = np.load("./datasets/info.npy")
+        self.index = faiss.read_index("./data-index/embedding.index")
+        self.embedding_info = np.load("./data-index/embedding_info.npy")
 
         print(f"loaded vectordb in {time.time()-start_time}s")
 
     def search_text(self, user_query, limit=100) -> Tuple:
-        result = query(user_query, limit)
+        result = hibrid_search(user_query, limit)
 
         if not result:
             print("nothing found")

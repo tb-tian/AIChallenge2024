@@ -1,7 +1,8 @@
 from glob import glob
+from typing import Tuple
 
 
-def load_all_video_keyframes_info():
+def load_all_video_keyframes_info() -> Tuple[list[str], dict[str, list]]:
     """
     Create a list of video and list of keyframe
     """
