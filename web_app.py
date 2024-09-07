@@ -18,7 +18,7 @@ cached = st.session_state["cached"]
 
 if "search_result" not in st.session_state:
     st.session_state["search_result"] = []
-search_result = st.session_state["search_result"]
+# search_result = st.session_state["search_result"]
 
 logger = get_logger()
 
@@ -83,18 +83,20 @@ if __name__ == "__main__":
 
             if cached.get(search_term):
                 logger.info("fetch from cache")
-                search_result = cached.get(search_term)
+                st.session_state["search_result"] = cached.get(search_term)
             else:
                 logger.info("fetch from source")
-                search_result = hibrid_search(search_term, limit=120)
-                # search_result = keyframe_querying(search_term)[:20]
-                cached[search_term] = search_result
+                st.session_state["search_result"] = hibrid_search(
+                    search_term, limit=120
+                )
+                # st.session_state["search_result"] = keyframe_querying(search_term)[:20]
+                cached[search_term] = st.session_state["search_result"]
 
             os.makedirs("tmp/submission", exist_ok=True)
             outpath = f"tmp/submission/{query_id}.csv"
             is_qa = "qa" in query_id
             with open(outpath, "w") as f:
-                exported_result = search_result[:100]
+                exported_result = st.session_state["search_result"][:100]
                 for vid, kf, sim in exported_result:
                     frame_idx, _ = get_kf_index(vid, kf)
                     if is_qa:
@@ -108,10 +110,10 @@ if __name__ == "__main__":
                 f"Download {outpath}", data=open(outpath), file_name=f"{query_id}.csv"
             )
 
-    if search_result:
+    if st.session_state["search_result"]:
         col_1, col_2, col_3, col_4 = st.columns(4)
 
-        for i, (video, kf, similarity) in enumerate(search_result):
+        for i, (video, kf, similarity) in enumerate(st.session_state["search_result"]):
             similarity = round(similarity, 5)
             if i % 4 == 0:
                 with col_1:
