@@ -69,11 +69,11 @@ Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x4
 
 2. data-staging: all transformation should go there
 ```bash
-mkdir data-staging
-mkdir data-staging/audio
-mkdir data-staging/transcripts
-mkdir data-staging/transcripts-en
-mkdir data-staging/clip-features
+mkdir -p data-staging/audio
+mkdir -p data-staging/audio-chunk-timestamps
+mkdir -p data-staging/clip-features
+mkdir -p data-staging/transcripts
+mkdir -p data-staging/transcripts-en
 ```
 
 3. data-index: artifact of index process go here
