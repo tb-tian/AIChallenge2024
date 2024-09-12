@@ -104,14 +104,14 @@ def sort_results(result):
     return ranked_results
 
 
-def hibrid_search(query, limit=20):
+def hibrid_search(query, limit=100):
     logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
-    logger.debug(f"document_querying: {query}")
-    doc_res = document_querying(query)
+    # logger.debug(f"document_querying: {query}")
+    # doc_res = document_querying(query)
 
     ranked_kf_res = sort_results(kf_res)
-    ranked_doc_res = sort_results(doc_res)
+    # ranked_doc_res = sort_results(doc_res)
 
     ranked_kf_dic = {}
     # print("Sorted Keyframe Results:")
@@ -119,18 +119,14 @@ def hibrid_search(query, limit=20):
         if video not in ranked_kf_dic:
             ranked_kf_dic[video] = {}
         ranked_kf_dic[video][kf] = rank
-        # if rank in range(1, 10):
-        #     print(f"Rank: {rank}, Video: {video}, Keyframe: {kf}, Score: {score}")
-        #     pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
-        #     image = Image.open(pic_img)
-        #     image.show()
 
-    ranked_doc_dic = {}
-    # print("\nSorted Document Results:")
-    for rank, video, kf, score in ranked_doc_res:
-        if video not in ranked_doc_dic:
-            ranked_doc_dic[video] = {}
-        ranked_doc_dic[video][kf] = rank
+
+    # ranked_doc_dic = {}
+    # # print("\nSorted Document Results:")
+    # for rank, video, kf, score in ranked_doc_res:
+    #     if video not in ranked_doc_dic:
+    #         ranked_doc_dic[video] = {}
+    #     ranked_doc_dic[video][kf] = rank
         # print(f"Rank: {rank}, Video: {video}, Keyframe: {kf}, Score: {score}")
 
     # for v in all_video:
@@ -143,25 +139,20 @@ def hibrid_search(query, limit=20):
         for kf in video_keyframe_dict[v]:
             if ranked_kf_dic[v].get(kf) is None:
                 continue
-            if ranked_doc_dic[v].get(kf) is None:
-                continue
+            # if ranked_doc_dic[v].get(kf) is None:
+            #     continue
             rerank.append(
                 (
                     v,
                     kf,
-                    0.7 / ranked_kf_dic[v].get(kf, 0)
-                    + 0.3 / ranked_doc_dic[v].get(kf, 0),
+                    1 / ranked_kf_dic[v].get(kf, 0)
+                    # + 0 / ranked_doc_dic[v].get(kf, 0),
                 )
             )
             # rerank.append((v, kf, kf_res[v][kf]))
 
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)
     rerank = rerank[:limit]
-    # for video, kf, score in rerank:
-    #     pic_img = f"./datasets/keyframes/{video}/{kf}.jpg"
-    #     image = Image.open(pic_img)
-    #     image.show()
-    #     print(f"Video: {video}, Keyframe: {kf}, Score: {score}")
 
     return rerank
 
