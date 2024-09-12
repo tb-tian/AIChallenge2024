@@ -1,4 +1,5 @@
 import csv
+from itertools import islice
 
 import numpy as np
 import streamlit as st
@@ -7,6 +8,7 @@ from PIL import Image
 from hybrid_search import hibrid_search, keyframe_querying
 from vectordb import VectorDB
 from helpers import get_logger
+
 WIDTH = 350
 
 if "cached" not in st.session_state:
@@ -19,24 +21,23 @@ search_result = st.session_state["search_result"]
 
 logger = get_logger()
 
+
 @st.dialog("Playing source video")
 def play_dialog(video, kf):
-    st.write(f"{video} - {kf}")
-
-    # txt_path = f"./data-staging/transcripts/{video}.txt"
-    # map_path = f"./data-source/map-keyframes/{video}.csv"
-    # with open(txt_path) as file, open(map_path) as map_file:
-    #     lines = file.readlines()
-    #     mapping = map_file.readlines()
-    #     kf = int(kf)
-    #     start, end = lines[kf - 1].split(" ")
-    #     n, pts_time, fps, frame_idx = mapping[kf].split(",")
-    # start = int(start) / float(fps)
-    # end = int(end) / float(fps)
-    # print(start, end)
-    # st.write(f"{video}, {frame_idx}")
+    map_path = f"./data-staging/map-keyframes/{video}.csv"
+    time_path = f"./data-staging/preprocessing/{video}_scenes.txt"
+    with open(map_path) as map_file, open(time_path) as time_file:
+        map_file = csv.reader(map_file)
+        time_file = csv.reader(time_file, delimiter=" ")
+        k = int(kf)
+        n, pts_time, fps, frame_idx = list(islice(map_file, k + 1))[k]
+        start, end = list(islice(time_file, k))[k - 1]
+    st.write(f"{video},{frame_idx}")
     st.video(
-        f"./data-source/videos/{video}.mp4", autoplay=True,
+        f"./data-source/videos/{video}.mp4",
+        autoplay=True,
+        start_time=int(start)/int(fps[:-2]),
+        end_time=int(end)/int(fps[:-2]),
     )
 
 
@@ -75,7 +76,6 @@ if __name__ == "__main__":
                     # search_result = keyframe_querying(search_term)[:20]
                     cached[search_term] = search_result
 
-
         if search_result:
             col1, col2, col3, col4 = st.columns(4)
 
@@ -85,19 +85,27 @@ if __name__ == "__main__":
                 if i % 4 == 0:
                     with col1:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
-                       
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
+
                 elif i % 4 == 1:
                     with col2:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
 
                 elif i % 4 == 2:
                     with col3:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
 
                 else:
                     with col4:
                         st.image(file_path, caption=similarity, width=WIDTH)
-                        st.button(f"view {video}/{kf}", on_click=play_dialog, args=[video, kf])
+                        st.button(
+                            f"view {video}/{kf}", on_click=play_dialog, args=[video, kf]
+                        )
