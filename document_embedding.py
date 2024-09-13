@@ -70,5 +70,5 @@ def querying(query):
 
 if __name__ == "__main__":
     embedding()
-    # query = "a World Cup cream cake"
-    # querying(query)
+    query = "A doctor/nurse is examining a patient's eyes using a machine called CLARUS. The patient wears a blue shirt. Ends with the scene of the doctor/nurse's hand adjusting the joystick with a glowing blue circle. What is the number recorded on the CLARUS machine?"
+    querying(query)
