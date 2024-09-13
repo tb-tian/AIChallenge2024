@@ -34,7 +34,7 @@ def keyframe_querying(query):
     keyframe_embeddings = np.array(keyframe_embeddings)
     embedding_info = np.load("./data-index/embedding_info.npy")
 
-    print(f"loaded {keyframe_embeddings.size} keyframes")
+    print(f"loaded {int(keyframe_embeddings.size / 512)} keyframes")
 
     keyframe_embeddings = normalize(keyframe_embeddings, axis=1)
 
@@ -60,20 +60,23 @@ def keyframe_querying(query):
 
 def document_querying(query):
     # Load the data
-    tfidf_matrix = load_npz("./data-index/tfidf_matrix.npz")
+    document_index = faiss.read_index("./data-index/tfidf.index")
     vectorizer = joblib.load("./data-index/tfidf_vectorizer.pkl")
     embedding_info = joblib.load("./data-index/document_embedding_info.pkl")
     mapping_df = pd.read_csv("./data-index/mapping.csv", dtype={"keyframe": str})
 
-    print(f"loaded {tfidf_matrix.shape} documents")
+    print(f"loaded {document_index.ntotal} documents")
 
-    query_vector = vectorizer.transform([query])
-
-    # Compute cosine similarity between the query and the documents
-    cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
+    query_feature = vectorizer.transform([query])
+    query_embedding = query_feature.toarray().reshape(1, -1).astype('float32')
+    query_embedding = normalize(query_embedding, axis=1)
+    
+    # Search the FAISS index
+    limit = document_index.ntotal
+    distances, indices = document_index.search(query_embedding, limit)
 
     result = {}
-    for idx, score in enumerate(cosine_similarities):
+    for idx, score in zip(indices[0], distances[0]):
         video, chunk = embedding_info[idx]
 
         mapping_row = mapping_df[
@@ -83,10 +86,9 @@ def document_querying(query):
             if video not in result:
                 result[video] = {}
             result[video][kf] = score
-            # if video == 'L01_V013':
-            #     print(video, kf)
 
     return result
+
 
 
 def sort_results(result):
@@ -107,11 +109,11 @@ def sort_results(result):
 def hibrid_search(query, limit=100):
     logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
-    # logger.debug(f"document_querying: {query}")
-    # doc_res = document_querying(query)
+    logger.debug(f"document_querying: {query}")
+    doc_res = document_querying(query)
 
     ranked_kf_res = sort_results(kf_res)
-    # ranked_doc_res = sort_results(doc_res)
+    ranked_doc_res = sort_results(doc_res)
 
     ranked_kf_dic = {}
     # print("Sorted Keyframe Results:")
@@ -121,12 +123,12 @@ def hibrid_search(query, limit=100):
         ranked_kf_dic[video][kf] = rank
 
 
-    # ranked_doc_dic = {}
+    ranked_doc_dic = {}
     # # print("\nSorted Document Results:")
-    # for rank, video, kf, score in ranked_doc_res:
-    #     if video not in ranked_doc_dic:
-    #         ranked_doc_dic[video] = {}
-    #     ranked_doc_dic[video][kf] = rank
+    for rank, video, kf, score in ranked_doc_res:
+        if video not in ranked_doc_dic:
+            ranked_doc_dic[video] = {}
+        ranked_doc_dic[video][kf] = rank
         # print(f"Rank: {rank}, Video: {video}, Keyframe: {kf}, Score: {score}")
 
     # for v in all_video:
@@ -139,14 +141,14 @@ def hibrid_search(query, limit=100):
         for kf in video_keyframe_dict[v]:
             if ranked_kf_dic[v].get(kf) is None:
                 continue
-            # if ranked_doc_dic[v].get(kf) is None:
-            #     continue
+            if ranked_doc_dic[v].get(kf) is None:
+                continue
             rerank.append(
                 (
                     v,
                     kf,
-                    1 / ranked_kf_dic[v].get(kf, 0)
-                    # + 0 / ranked_doc_dic[v].get(kf, 0),
+                    0.7 / ranked_kf_dic[v].get(kf, 0)
+                    + 0.3 / ranked_doc_dic[v].get(kf, 0),
                 )
             )
             # rerank.append((v, kf, kf_res[v][kf]))

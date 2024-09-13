@@ -77,6 +77,7 @@ if __name__ == "__main__":
                     cached[search_term] = search_result
 
         if search_result:
+            logger.info("search complete")
             col1, col2, col3, col4 = st.columns(4)
 
             for i, (video, kf, similarity) in enumerate(search_result):
