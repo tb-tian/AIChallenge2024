@@ -44,7 +44,6 @@ tree -L 2 -l .
 ├── data-index
 │   └── ...
 ├── data-source ->
-│   ├── keyframes
 │   └── videos
 ├── data-staging
 │   ├── audio-chunk-timestamps

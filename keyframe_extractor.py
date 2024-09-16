@@ -54,7 +54,7 @@ def keyframe_extractor(v):
     file_path = f"./data-staging/preprocessing/{v}_scenes.txt"
     video_path = f"./data-source/videos/{v}.mp4"
     kf_path = f"./data-source/keyframes/{v}"
-    map_path = f"./data-source/map-keyframes/{v}.csv"
+    map_path = f"./data-staging/map-keyframes/{v}.csv"
 
     cap = cv2.VideoCapture(video_path)
     os.makedirs(kf_path, exist_ok=True)
@@ -82,6 +82,8 @@ def keyframe_extractor(v):
 
 
 if __name__ == "__main__":
+    os.makedirs("./data-staging/map-keyframes", exist_ok=True)
+    
     for v in all_video:
         segmentation(v)
         keyframe_extractor(v)

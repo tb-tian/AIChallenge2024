@@ -4,7 +4,6 @@ torch
 tensorflow
 
 faiss-cpu
-opencv-python
 
 # CLIP
 open_clip_torch
@@ -32,3 +31,6 @@ loguru
 tqdm
 
 salesforce-lavis
+
+opencv-python==4.8.0.74
+

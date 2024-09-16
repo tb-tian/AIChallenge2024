@@ -26,7 +26,7 @@ logger = get_logger()
 
 @st.dialog("Playing source video")
 def play_dialog(video, kf):
-    map_path = f"./data-source/map-keyframes/{video}.csv"
+    map_path = f"./data-staging/map-keyframes/{video}.csv"
     time_path = f"./data-staging/preprocessing/{video}_scenes.txt"
     with open(map_path) as map_file, open(time_path) as time_file:
         map_file = csv.reader(map_file)
