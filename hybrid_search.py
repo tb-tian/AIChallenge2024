@@ -104,6 +104,7 @@ def sort_results(result):
     ]
     return ranked_results
 
+
 def keyframe_search(query, limit=100):
     logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
@@ -116,26 +117,21 @@ def keyframe_search(query, limit=100):
         if video not in ranked_kf_dic:
             ranked_kf_dic[video] = {}
         ranked_kf_dic[video][kf] = rank
-    
+
     logger.debug("rerank")
     rerank = []
     for v in all_video:
         for kf in video_keyframe_dict[v]:
             if ranked_kf_dic[v].get(kf) is None:
                 continue
-            rerank.append(
-                (
-                    v,
-                    kf,
-                    1 / ranked_kf_dic[v].get(kf, 0)
-                )
-            )
+            rerank.append((v, kf, 1 / ranked_kf_dic[v].get(kf, 0)))
             # rerank.append((v, kf, kf_res[v][kf]))
 
     rerank = sorted(rerank, key=lambda x: x[2], reverse=True)
     rerank = rerank[:limit]
 
     return rerank
+
 
 def hibrid_search(query, limit=100):
     logger.debug(f"keyframe_querying: {query}")

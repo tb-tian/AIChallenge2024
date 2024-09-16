@@ -8,7 +8,6 @@ import streamlit as st
 from PIL import Image
 
 from helpers import get_logger
-from hybrid_search import hibrid_search, keyframe_querying
 from hybrid_search import hibrid_search, keyframe_search
 from vectordb import VectorDB
 from helpers import get_logger

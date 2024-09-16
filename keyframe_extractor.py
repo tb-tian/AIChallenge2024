@@ -83,7 +83,7 @@ def keyframe_extractor(v):
 
 if __name__ == "__main__":
     os.makedirs("./data-staging/map-keyframes", exist_ok=True)
-    
+
     for v in all_video:
         segmentation(v)
         keyframe_extractor(v)
