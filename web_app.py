@@ -7,7 +7,7 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 
-from hybrid_search import hibrid_search, keyframe_querying
+from hybrid_search import hibrid_search, keyframe_search
 from vectordb import VectorDB
 from helpers import get_logger
 
@@ -77,9 +77,10 @@ if __name__ == "__main__":
     query_id = st.text_input(
         "Unique query id (used for export filename)", value="query-0-kis"
     )
-    button = st.button("SEARCH", type="primary")
+    keyframe_button = st.button("SEARCH Keyframe Only", type="primary")
+    hybrid_button = st.button("SEARCH Hybrid", type="primary")
 
-    if button:
+    if keyframe_button or hybrid_button:
         with st.spinner("Fetching Answer..."):
             search_term = search_term.strip()
             # play("video", "kf")
@@ -90,10 +91,14 @@ if __name__ == "__main__":
                 st.session_state["search_result"] = cached.get(search_term)
             else:
                 logger.info("fetch from source")
-                st.session_state["search_result"] = hibrid_search(
-                    search_term, limit=120
-                )
-                # search_result = keyframe_querying(search_term)[:20]
+                if hybrid_button:
+                    st.session_state["search_result"] = hibrid_search(
+                        search_term, limit=120
+                    )
+                elif keyframe_button:
+                    st.session_state["search_result"] = keyframe_search(
+                        search_term, limit=120
+                    )
                 cached[search_term] = st.session_state["search_result"]
 
             os.makedirs("tmp/submission", exist_ok=True)
