@@ -1,5 +1,6 @@
 import csv
 import os
+from itertools import islice
 from typing import Tuple
 
 import numpy as np
@@ -9,6 +10,7 @@ from PIL import Image
 from helpers import get_logger
 from hybrid_search import hibrid_search, keyframe_querying
 from vectordb import VectorDB
+from helpers import get_logger
 
 WIDTH = 350
 
@@ -18,38 +20,42 @@ cached = st.session_state["cached"]
 
 if "search_result" not in st.session_state:
     st.session_state["search_result"] = []
-# search_result = st.session_state["search_result"]
 
 logger = get_logger()
 
 
-def get_kf_index(video, kf) -> Tuple[int, float]:  # frame_idx and start time
-    transcript_path = f"./data-staging/audio-chunk-timestamps/{video}.csv"
-    map_path = f"./data-source/map-keyframes/{video}.csv"
-    with open(map_path) as map_file, open(transcript_path) as transcript_file:
-        # lines = transcript_file.readlines()
-        mapping = map_file.readlines()
-        kf = int(kf)
-        # start, end = lines[1:][kf - 1].split(",")
-        n, pts_time, fps, frame_idx = mapping[kf].split(",")
-    # start = int(start) / float(fps)
-    # end = int(end) / float(fps)
-    # print(start, end)
-    return int(frame_idx), float(pts_time)
-
-
 @st.dialog("Playing source video")
-def play_dialog(img_source, video, kf):
-    print(f"popup load ./data-source/videos/{video}.mp4", img_source, video, kf)
-    frame_idx, pts_time = get_kf_index(video, kf)
-    st.write(f"video: {video}, keyframe: {kf}, video start: {pts_time}")
-    st.image(img_source)
+def play_dialog(video, kf):
+    map_path = f"./data-source/map-keyframes/{video}.csv"
+    time_path = f"./data-staging/preprocessing/{video}_scenes.txt"
+    with open(map_path) as map_file, open(time_path) as time_file:
+        map_file = csv.reader(map_file)
+        time_file = csv.reader(time_file, delimiter=" ")
+        k = int(kf)
+        n, pts_time, fps, frame_idx = list(islice(map_file, k + 1))[k]
+        start, end = list(islice(time_file, k))[k - 1]
+    st.write(f"{video},{frame_idx}")
     st.video(
         f"./data-source/videos/{video}.mp4",
-        start_time=pts_time - 1,  # start 1 sec sooner
         autoplay=True,
+        start_time=int(start) / int(fps[:-2]),
+        end_time=int(end) / int(fps[:-2]),
     )
     print("POPup closed")
+
+
+@st.dialog("Zoom keyframe")
+def zoom_image(file_path, video, kf):
+    map_path = f"./data-staging/map-keyframes/{video}.csv"
+    time_path = f"./data-staging/preprocessing/{video}_scenes.txt"
+    with open(map_path) as map_file, open(time_path) as time_file:
+        map_file = csv.reader(map_file)
+        time_file = csv.reader(time_file, delimiter=" ")
+        k = int(kf)
+        n, pts_time, fps, frame_idx = list(islice(map_file, k + 1))[k]
+        start, end = list(islice(time_file, k))[k - 1]
+
+    st.image(file_path, caption=f"{video},{frame_idx}", use_column_width=True)
 
 
 if __name__ == "__main__":
@@ -89,7 +95,7 @@ if __name__ == "__main__":
                 st.session_state["search_result"] = hibrid_search(
                     search_term, limit=120
                 )
-                # st.session_state["search_result"] = keyframe_querying(search_term)[:20]
+                # search_result = keyframe_querying(search_term)[:20]
                 cached[search_term] = st.session_state["search_result"]
 
             os.makedirs("tmp/submission", exist_ok=True)
@@ -98,7 +104,11 @@ if __name__ == "__main__":
             with open(outpath, "w") as f:
                 exported_result = st.session_state["search_result"][:100]
                 for vid, kf, sim in exported_result:
-                    frame_idx, _ = get_kf_index(vid, kf)
+                    map_path = f"./data-source/map-keyframes/{vid}.csv"
+                    k = int(kf)
+                    with open(map_path) as map_file:
+                        map_file = csv.reader(map_file)
+                        _, _, _, frame_idx = list(islice(map_file, k + 1))[k]
                     if is_qa:
                         f.write(f"{vid},{frame_idx},\n")
                     else:
@@ -111,77 +121,51 @@ if __name__ == "__main__":
             )
 
     if st.session_state["search_result"]:
-        col_1, col_2, col_3, col_4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
 
         for i, (video, kf, similarity) in enumerate(st.session_state["search_result"]):
             similarity = round(similarity, 5)
+            file_path = f"./data-source/keyframes/{video}/{kf}.jpg"
             if i % 4 == 0:
-                with col_1:
-                    st.image(
-                        f"./data-source/keyframes/{video}/{kf}.jpg",
-                        caption=similarity,
-                        width=WIDTH,
-                    )
-                    if st.button(f"view {video}/{kf}"):
-                        play_dialog(
-                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
-                        )
-                    # st.checkbox(
-                    #     "ok",
-                    #     value=True,
-                    #     key=f"{video}/{kf}",
-                    #     label_visibility="hidden",
-                    #     )
+                with col1:
+                    st.image(file_path, caption=similarity, width=WIDTH)
+                    button_col1, button_col2 = st.columns([1, 1])
+                    with button_col1:
+                        if st.button(f"view {video}/{kf}"):
+                            play_dialog(video, kf)
+                    with button_col2:
+                        if st.button(f"zoom {video}/{kf}"):
+                            zoom_image(file_path, video, kf)
+
             elif i % 4 == 1:
-                with col_2:
-                    st.image(
-                        f"./data-source/keyframes/{video}/{kf}.jpg",
-                        caption=similarity,
-                        width=WIDTH,
-                    )
-                    if st.button(f"view {video}/{kf}"):
-                        play_dialog(
-                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
-                        )
-                    # st.checkbox(
-                    #     "ok",
-                    #     value=True,
-                    #     key=f"{video}/{kf}",
-                    #     label_visibility="hidden",
-                    # )
+                with col2:
+                    st.image(file_path, caption=similarity, width=WIDTH)
+                    button_col1, button_col2 = st.columns([1, 1])
+                    with button_col1:
+                        if st.button(f"view {video}/{kf}"):
+                            play_dialog(video, kf)
+                    with button_col2:
+                        if st.button(f"zoom {video}/{kf}"):
+                            zoom_image(file_path, video, kf)
+
             elif i % 4 == 2:
-                with col_3:
-                    st.image(
-                        f"./data-source/keyframes/{video}/{kf}.jpg",
-                        caption=similarity,
-                        width=WIDTH,
-                    )
-                    if st.button(f"view {video}/{kf}"):
-                        play_dialog(
-                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
-                        )
-                    # st.checkbox(
-                    #     "ok",
-                    #     value=True,
-                    #     key=f"{video}/{kf}",
-                    #     label_visibility="hidden",
-                    # )
+                with col3:
+                    st.image(file_path, caption=similarity, width=WIDTH)
+                    button_col1, button_col2 = st.columns([1, 1])
+                    with button_col1:
+                        if st.button(f"view {video}/{kf}"):
+                            play_dialog(video, kf)
+                    with button_col2:
+                        if st.button(f"zoom {video}/{kf}"):
+                            zoom_image(file_path, video, kf)
+
             else:
-                with col_4:
-                    st.image(
-                        f"./data-source/keyframes/{video}/{kf}.jpg",
-                        caption=similarity,
-                        width=WIDTH,
-                    )
-                    if st.button(f"view {video}/{kf}"):
-                        play_dialog(
-                            f"./data-source/keyframes/{video}/{kf}.jpg", video, kf
-                        )
-                    # st.checkbox(
-                    #     "ok",
-                    #     value=True,
-                    #     key=f"{video}/{kf}",
-                    #     label_visibility="hidden",
-                    # )
-    else:
-        st.text("search_result elem not available")
+                with col4:
+                    st.image(file_path, caption=similarity, width=WIDTH)
+                    button_col1, button_col2 = st.columns([1, 1])
+                    with button_col1:
+                        if st.button(f"view {video}/{kf}"):
+                            play_dialog(video, kf)
+                    with button_col2:
+                        if st.button(f"zoom {video}/{kf}"):
+                            zoom_image(file_path, video, kf)

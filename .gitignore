@@ -3,6 +3,8 @@ datasets_*
 data-staging
 data-source
 data-index
+pack-pretest
+submission
 
 tmp
 app.log

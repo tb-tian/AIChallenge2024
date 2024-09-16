@@ -2,7 +2,9 @@ import joblib
 from scipy.sparse import load_npz, save_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
+import faiss
+import numpy as np
+from sklearn.preprocessing import normalize
 import helpers
 from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
@@ -32,13 +34,16 @@ def embedding():
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(documents)
 
-    # Save the TF-IDF matrix
-    save_npz("./data-index/tfidf_matrix.npz", tfidf_matrix)
+    # Normalize the document embeddings
+    tfidf_matrix = normalize(tfidf_matrix, axis=1)
 
-    # Save the vectorizer
+    # Create a FAISS index and add the document embeddings
+    d = tfidf_matrix.shape[1]
+    tfidf_index = faiss.IndexFlatL2(d)
+    tfidf_index.add(tfidf_matrix.toarray().astype(np.float32))
+
+    faiss.write_index(tfidf_index, "./data-index/tfidf.index")
     joblib.dump(vectorizer, "./data-index/tfidf_vectorizer.pkl")
-
-    # Save the embedding information
     joblib.dump(embedding_info, "./data-index/document_embedding_info.pkl")
 
 
@@ -70,5 +75,5 @@ def querying(query):
 
 if __name__ == "__main__":
     embedding()
-    # query = "a World Cup cream cake"
-    # querying(query)
+    query = "A doctor/nurse is examining a patient's eyes using a machine called CLARUS. The patient wears a blue shirt. Ends with the scene of the doctor/nurse's hand adjusting the joystick with a glowing blue circle. What is the number recorded on the CLARUS machine?"
+    querying(query)

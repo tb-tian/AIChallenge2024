@@ -25,8 +25,6 @@ asttokens==2.4.1
     # via stack-data
 astunparse==1.6.3
     # via tensorflow
-async-timeout==4.0.3
-    # via aiohttp
 attrs==24.2.0
     # via
     #   aiohttp
@@ -729,8 +727,6 @@ tokenizers==0.13.3
     #   transformers
 toml==0.10.2
     # via streamlit
-tomli==2.0.1
-    # via black
 torch==2.0.0
     # via
     #   -r requirements.in
@@ -823,8 +819,6 @@ typing-extensions==4.12.2
     #   alembic
     #   altair
     #   asteroid-filterbanks
-    #   black
-    #   cloudpathlib
     #   huggingface-hub
     #   iopath
     #   ipython

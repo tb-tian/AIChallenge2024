@@ -4,7 +4,7 @@ torch
 tensorflow
 
 faiss-cpu
-# opencv-python
+opencv-python
 
 # CLIP
 open_clip_torch
