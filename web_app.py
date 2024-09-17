@@ -1,3 +1,4 @@
+from copy import deepcopy
 import csv
 import os
 from itertools import islice
@@ -8,7 +9,8 @@ import streamlit as st
 from PIL import Image
 
 from helpers import get_logger
-from hybrid_search import hibrid_search, keyframe_search
+from hybrid_search import hybrid_search, keyframe_search
+from videoqa import qa_engine
 from vectordb import VectorDB
 from helpers import get_logger
 
@@ -60,29 +62,51 @@ def zoom_image(file_path, video, kf):
 
 if __name__ == "__main__":
     st.set_page_config(layout="wide")
-    hide_img_fs = """
+    st.markdown(
+        """
     <style>
     button[title="View fullscreen"]{
         visibility: hidden;
     }
     </style>
-    """
-
-    st.markdown(hide_img_fs, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     st.header("TIAN™ Video Search")
     st.write(
         "Welcome to TIAN Video Search. You can blah blah blah here. And blah blah blah there also."
     )
 
-    search_term = st.text_area("Ask a question here:", height=100)
-    query_id = st.text_input(
-        "Unique query id (used for export filename)", value="query-0-kis"
-    )
-    keyframe_button = st.button("SEARCH Keyframe Only", type="primary")
-    hybrid_button = st.button("SEARCH Hybrid", type="primary")
+    search_term = st.text_area("Search query (required):", height=100)
+    qa_term = st.text_area("Question query (for qa query only):", height=25)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        result_filename = st.text_input(
+            "Result filename (must have one 'kis' or 'qa' in it)",
+            value="query-0-kis.csv",
+        )
+    with col2:
+        # keyframe_button = st.button("SEARCH Keyframe Only", type="primary")
+        search_option = st.selectbox(
+            "Choose your search type",
+            ("keyframe_only", "hybrid"),
+            index=0,
+            placeholder="Choose your search type",
+        )
+    with col3:
+        search_button = st.button("SEARCH!", type="primary")
 
-    if keyframe_button or hybrid_button:
+    if "qa" in result_filename:
+        st.markdown(":red[This is QA query!]")
+        if qa_term == "":
+            st.markdown(
+                ":red[THIS IS QA query you should put something into qa_term!]"
+            )
+    else:
+        st.markdown(":red[This KIS query!]")
+
+    if search_button:
         with st.spinner("Fetching Answer..."):
             search_term = search_term.strip()
             # play("video", "kf")
@@ -93,43 +117,63 @@ if __name__ == "__main__":
                 st.session_state["search_result"] = cached.get(search_term)
             else:
                 logger.info("fetch from source")
-                if hybrid_button:
-                    st.session_state["search_result"] = hibrid_search(
-                        search_term, limit=120
-                    )
-                elif keyframe_button:
-                    st.session_state["search_result"] = keyframe_search(
-                        search_term, limit=120
-                    )
+                if search_option == "hybrid":
+                    search_result = hybrid_search(search_term, limit=120)
+                elif search_option == "keyframe_only":
+                    search_result = keyframe_search(search_term, limit=120)
+                else:
+                    raise ValueError("invalid search_option")
+
+                if "qa" in result_filename:
+                    logger.info("this query is qa query, run qa model..")
+                    new_search_result = []
+                    for result in search_result:
+                        file_path = (
+                            f"./data-staging/keyframes/{result[0]}/{result[1]}.jpg"
+                        )
+                        response = qa_engine.ask(file_path, qa_term)
+                        new_search_result.append(result + (response,))
+                else:
+                    new_search_result = search_result
+
+                st.session_state["search_result"] = new_search_result
                 cached[search_term] = st.session_state["search_result"]
 
             os.makedirs("tmp/submission", exist_ok=True)
-            outpath = f"tmp/submission/{query_id}.csv"
-            is_qa = "qa" in query_id
+            outpath = f"tmp/submission/{result_filename}"
+            is_qa = "qa" in result_filename
             with open(outpath, "w") as f:
                 exported_result = st.session_state["search_result"][:100]
-                for vid, kf, sim in exported_result:
+                for res in exported_result:
+                    vid = res[0]
+                    kf = res[1]
+                    sim = res[2]
                     map_path = f"./data-staging/map-keyframes/{vid}.csv"
                     k = int(kf)
                     with open(map_path) as map_file:
                         map_file = csv.reader(map_file)
                         _, _, _, frame_idx = list(islice(map_file, k + 1))[k]
                     if is_qa:
-                        f.write(f"{vid},{frame_idx},\n")
+                        f.write(f"{vid},{frame_idx},{res[3]}\n")
                     else:
                         f.write(f"{vid},{frame_idx}\n")
 
             st.write(f"exported to {outpath} with {len(exported_result)} results")
             logger.info(f"exported to {outpath}")
             download = st.download_button(
-                f"Download {outpath}", data=open(outpath), file_name=f"{query_id}.csv"
+                f"Download {outpath}",
+                data=open(outpath),
+                file_name=f"{result_filename}.csv",
             )
 
     if st.session_state["search_result"]:
         col1, col2, col3, col4 = st.columns(4)
 
-        for i, (video, kf, similarity) in enumerate(st.session_state["search_result"]):
-            similarity = round(similarity, 5)
+        for i, value in enumerate(st.session_state["search_result"]):
+            video = value[0]
+            kf = value[1]
+            similarity = value[2:]
+            # similarity = round(similarity, 5)
             file_path = f"./data-staging/keyframes/{video}/{kf}.jpg"
             if i % 4 == 0:
                 with col1:

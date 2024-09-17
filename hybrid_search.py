@@ -1,4 +1,5 @@
 import csv
+from typing import Tuple
 
 import faiss
 import joblib
@@ -105,7 +106,7 @@ def sort_results(result):
     return ranked_results
 
 
-def keyframe_search(query, limit=100):
+def keyframe_search(query, limit=100) -> Tuple[str, str, float]:
     logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
 
@@ -133,7 +134,7 @@ def keyframe_search(query, limit=100):
     return rerank
 
 
-def hibrid_search(query, limit=100):
+def hybrid_search(query, limit=100) -> Tuple[str, str, float]:
     logger.debug(f"keyframe_querying: {query}")
     kf_res = keyframe_querying(query)
     logger.debug(f"document_querying: {query}")
@@ -186,7 +187,7 @@ def hibrid_search(query, limit=100):
 
 
 if __name__ == "__main__":
-    res = hibrid_search("car", 20)
+    res = hybrid_search("car", 20)
     print(res)
 
     for video, keyframe, similarity in res:

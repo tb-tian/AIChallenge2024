@@ -16,7 +16,9 @@ logger = get_logger()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 clip_model, _, preprocess = open_clip.create_model_and_transforms(
-    "ViT-B-32", pretrained="openai", device=device,
+    "ViT-B-32",
+    pretrained="openai",
+    device=device,
 )
 clip_model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
 

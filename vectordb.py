@@ -5,7 +5,7 @@ import faiss
 import numpy as np
 import open_clip
 
-from hybrid_search import hibrid_search
+from hybrid_search import hybrid_search
 
 
 class VectorDB:
@@ -25,7 +25,7 @@ class VectorDB:
         print(f"loaded vectordb in {time.time()-start_time}s")
 
     def search_text(self, user_query, limit=100) -> Tuple:
-        result = hibrid_search(user_query, limit)
+        result = hybrid_search(user_query, limit)
 
         if not result:
             print("nothing found")
