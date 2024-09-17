@@ -109,7 +109,7 @@ if __name__ == "__main__":
             with open(outpath, "w") as f:
                 exported_result = st.session_state["search_result"][:100]
                 for vid, kf, sim in exported_result:
-                    map_path = f"./data-source/map-keyframes/{vid}.csv"
+                    map_path = f"./data-staging/map-keyframes/{vid}.csv"
                     k = int(kf)
                     with open(map_path) as map_file:
                         map_file = csv.reader(map_file)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
         for i, (video, kf, similarity) in enumerate(st.session_state["search_result"]):
             similarity = round(similarity, 5)
-            file_path = f"./data-source/keyframes/{video}/{kf}.jpg"
+            file_path = f"./data-staging/keyframes/{video}/{kf}.jpg"
             if i % 4 == 0:
                 with col1:
                     st.image(file_path, caption=similarity, width=WIDTH)

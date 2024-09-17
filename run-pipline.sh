@@ -19,6 +19,6 @@ echo "keyframe_embedding"
 python keyframe_embedding.py
 
 
-4.
+# 4.
 python mapping.py
 

@@ -190,7 +190,7 @@ if __name__ == "__main__":
     print(res)
 
     for video, keyframe, similarity in res:
-        file_path = f"./data-source/keyframes/{video}/{keyframe}.jpg"
+        file_path = f"./data-staging/keyframes/{video}/{keyframe}.jpg"
         image = Image.open(file_path)
         image.show()
         print(f"Video: {video}, Keyframe: {keyframe}, Similarity: {similarity}")

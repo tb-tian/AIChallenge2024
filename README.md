@@ -130,6 +130,8 @@ python mapping.py
 Running the web_app version
 ```bash
 streamlit run web_app.py
+# or
+streamlit run web_app.py --browser.serverAddress '0.0.0.0'
 ```
 
 Testing the model and sample data
