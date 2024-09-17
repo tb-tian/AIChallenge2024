@@ -14,15 +14,17 @@ from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 logger = get_logger()
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 clip_model, _, preprocess = open_clip.create_model_and_transforms(
-    "ViT-B-32", pretrained="openai"
+    "ViT-B-32", pretrained="openai", device=device,
 )
 clip_model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
 
 
 def embedding(pic_path):
     pic = Image.open(pic_path)
-    pic = preprocess(pic).unsqueeze(0)
+    # pic = preprocess(pic).unsqueeze(0)
+    pic = preprocess(pic).unsqueeze(0).to(device)
     with torch.no_grad():
         pic_feat = clip_model.encode_image(pic)
         pic_feat /= pic_feat.norm(dim=-1, keepdim=True)
@@ -44,7 +46,7 @@ def main():
             desc=f"Processing keyframes for video {v}",
             leave=False,
         ):
-            keyframe_path = f"./data-source/keyframes/{v}/{k}.jpg"
+            keyframe_path = f"./data-staging/keyframes/{v}/{k}.jpg"
             keyframe_embedding = embedding(keyframe_path).reshape(1, -1)
             keyframe_array = np.vstack((keyframe_array, keyframe_embedding))
         np.save(np_out, keyframe_array)

@@ -53,7 +53,7 @@ def segmentation(v):
 def keyframe_extractor(v):
     file_path = f"./data-staging/preprocessing/{v}_scenes.txt"
     video_path = f"./data-source/videos/{v}.mp4"
-    kf_path = f"./data-source/keyframes/{v}"
+    kf_path = f"./data-staging/keyframes/{v}"
     map_path = f"./data-staging/map-keyframes/{v}.csv"
 
     cap = cv2.VideoCapture(video_path)
@@ -69,7 +69,7 @@ def keyframe_extractor(v):
             cap.set(cv2.CAP_PROP_POS_FRAMES, mid)
             ret, frame = cap.read()
             if ret:
-                keyframe_path = f"./data-source/keyframes/{v}/{i+1:04}.jpg"
+                keyframe_path = f"./data-staging/keyframes/{v}/{i+1:04}.jpg"
                 cv2.imwrite(keyframe_path, frame)
                 fps = cap.get(cv2.CAP_PROP_FPS)
                 mapping.writerow([i + 1, mid / fps, fps, mid])
