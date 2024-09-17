@@ -26,14 +26,13 @@ class QAEngine:
 
     def ask(self, image_path: str, question: str) -> str:
         raw_image = Image.open(image_path).convert("RGB")
-        question = "How many people in this picture"
         image = self.vis_processors["eval"](raw_image).unsqueeze(0).to(self.device)
         question = self.txt_processors["eval"](question)
         ans = self.model.predict_answers(
             samples={"image": image, "text_input": question},
             inference_method="generate",
         )
-        logger.info(f"qna test: {image_path} {question} {ans}")
+        logger.debug(f"qna test: {image_path} {question} {ans}")
         return ans
 
 
