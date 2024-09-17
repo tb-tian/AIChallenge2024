@@ -97,14 +97,17 @@ if __name__ == "__main__":
     with col3:
         search_button = st.button("SEARCH!", type="primary")
 
-    if "qa" in result_filename:
-        st.markdown(":red[This is QA query!]")
+    if "kis" in result_filename.lower():
+        st.info(f"filename: {result_filename} => KIS query is using!", icon="ℹ️")
+    elif "qa" in result_filename.lower():
+        st.info(f"filename: {result_filename} => QA query is using!", icon="🔥")
         if qa_term == "":
-            st.markdown(
-                ":red[THIS IS QA query you should put something into qa_term!]"
-            )
+            st.error("THIS IS QA query you should put something into qa_term => cancel querying")
+            search_button = ""
     else:
-        st.markdown(":red[This KIS query!]")
+        st.error(f"filename: {result_filename} => no KIS or QA is set cancel querying")
+        search_button = ""
+        
 
     if search_button:
         with st.spinner("Fetching Answer..."):
