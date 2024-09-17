@@ -132,6 +132,10 @@ if __name__ == "__main__":
                             f"./data-staging/keyframes/{result[0]}/{result[1]}.jpg"
                         )
                         response = qa_engine.ask(file_path, qa_term)
+                        if len(response) > 0:
+                            response = response[0]
+                        else:
+                            response = ""
                         new_search_result.append(result + (response,))
                 else:
                     new_search_result = search_result
