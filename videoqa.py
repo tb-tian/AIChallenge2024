@@ -2,8 +2,8 @@ import torch
 from lavis.models import load_model_and_preprocess
 from PIL import Image
 
-from load_all_video_keyframes_info import load_all_video_keyframes_info
 from helpers import get_logger
+from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 logger = get_logger()
 

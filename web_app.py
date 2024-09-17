@@ -1,6 +1,6 @@
-from copy import deepcopy
 import csv
 import os
+from copy import deepcopy
 from itertools import islice
 from typing import Tuple
 
@@ -10,9 +10,8 @@ from PIL import Image
 
 from helpers import get_logger
 from hybrid_search import hybrid_search, keyframe_search
-from videoqa import qa_engine
 from vectordb import VectorDB
-from helpers import get_logger
+from videoqa import qa_engine
 
 WIDTH = 350
 
@@ -102,12 +101,13 @@ if __name__ == "__main__":
     elif "qa" in result_filename.lower():
         st.info(f"filename: {result_filename} => QA query is using!", icon="🔥")
         if qa_term == "":
-            st.error("THIS IS QA query you should put something into qa_term => cancel querying")
+            st.error(
+                "THIS IS QA query you should put something into qa_term => cancel querying"
+            )
             search_button = ""
     else:
         st.error(f"filename: {result_filename} => no KIS or QA is set cancel querying")
         search_button = ""
-        
 
     if search_button:
         with st.spinner("Fetching Answer..."):

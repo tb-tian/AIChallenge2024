@@ -1,10 +1,11 @@
+import faiss
 import joblib
+import numpy as np
 from scipy.sparse import load_npz, save_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import faiss
-import numpy as np
 from sklearn.preprocessing import normalize
+
 import helpers
 from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info

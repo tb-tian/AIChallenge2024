@@ -1,6 +1,6 @@
+import nltk
 from easynmt import EasyNMT
 from tqdm import tqdm
-import nltk
 
 import helpers
 from helpers import get_logger, is_on_cpu

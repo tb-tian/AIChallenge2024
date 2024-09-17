@@ -72,9 +72,10 @@ tree -L 2 -l .
 
 ```bash
 mkdir data-source
-# copy all downloaded data here
-# then unzip all
-# rearrange input data to correct structure
+# downloaded data here
+wget url1 url2 url3...
+unzip *.zip
+mv video/* videos/
 ```
 
 Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x43YDL9l and place inside that `./data-source` directory.

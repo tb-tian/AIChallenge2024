@@ -3,8 +3,8 @@ import pathlib
 import sys
 
 import loguru
-from loguru import logger
 import torch
+from loguru import logger
 
 stop_sign = """
                         ██                       
