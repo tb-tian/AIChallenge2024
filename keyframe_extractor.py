@@ -8,7 +8,7 @@ import numpy as np
 import tensorflow as tf
 
 from helpers import get_logger
-from legacy.transnetv2 import TransNetV2
+from transnetv2 import TransNetV2
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 logger = get_logger()
@@ -41,12 +41,12 @@ def segmentation(v):
     scenes = trans_net_model.predictions_to_scenes(single_frame_predictions)
     np.savetxt(destination + f"{v}_scenes.txt", scenes, fmt="%d")
 
-    if os.path.exists(destination + f"{v}_vis.png"):
-        print(
-            f"[TransNetV2] {v}.vis.png already exists. "
-            f"Skipping visualization of video {v}.",
-            file=sys.stderr,
-        )
+    # if os.path.exists(destination + f"{v}_vis.png"):
+    #     print(
+    #         f"[TransNetV2] {v}.vis.png already exists. "
+    #         f"Skipping visualization of video {v}.",
+    #         file=sys.stderr,
+    #     )
 
     pil_image = trans_net_model.visualize_predictions(
         video_frames, predictions=(single_frame_predictions, all_frame_predictions)
@@ -55,8 +55,10 @@ def segmentation(v):
 
 
 def keyframe_extractor(v):
+    # in
     video_path = f"./data-source/videos/{v}.mp4"
     file_path = f"./data-staging/preprocessing/{v}_scenes.txt"
+    # out
     kf_path = f"./data-staging/keyframes/{v}"
     map_path = f"./data-staging/map-keyframes/{v}.csv"
 
