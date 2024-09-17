@@ -68,7 +68,8 @@ tree -L 2 -l .
 
 ```
 
-1. data-source: read only folder, source data should be placed here
+1. data-source: read only folder, source data should be placed here, at the moment, it should only have source video only
+
 ```bash
 mkdir data-source
 # copy all downloaded data here
@@ -82,6 +83,7 @@ Download from https://drive.google.com/drive/folders/1wzM8PtgxXgDDeQJtzGXmmEn1x4
 ```bash
 mkdir data-staging
 mkdir data-staging/audio-chunk-timestamps
+mkdir data-staging/keyframes
 mkdir data-staging/preprocessing
 mkdir data-staging/map-keyframes
 mkdir data-staging/transcripts
@@ -99,31 +101,6 @@ mkdir data-index
 ### Indexing Stage
 
 TLDR: using `bash run-pipline.sh`
-
-```
-# maybe out of date docs
-
-**Step 1**: Prepare the project structure as shown above and ensure you have the videos downloaded.
-
-**Step 2**: Run [video_processing.py](./video_processing.py). This process may take a significant amount of time.
-python video_processing.py
-Then, you will have vietnamese and english dialogue in [timestamps](./datasets/timestamps/) folder.
-
-**Step 3**: Run [keyframe_extractor.py](./keyframe_extractor.py). This process will
-1. extract keyframe from the video and store them in `keyframes`
-2. create a file csv of frame index in `map-keyframes` folder.
-python keyframe_extractor.py
-
-
-
-**Step 4**: Run [document_embedding.py](./document_embedding.py) and [keyframe_embedding.py](./keyframe_embedding.py)
-python document_embedding.py 
-python keyframe_embedding.py
-
-**Step 5**: Run [mapping.py](./mapping.py). This process will create `mapping.csv` to map each keyframe to the corresponding chunk of dialogue.
-python mapping.py
-```
-
 
 ### Retrieval Stage
 
