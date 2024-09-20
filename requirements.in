@@ -16,6 +16,11 @@ langdetect  # lang detect for CPU machine
 soundfile
 ffmpeg-python
 
+# OCR
+easyocr
+# opencv-python-headless==4.5.4.60 # should be this version for easyocr to run
+opencv-python-headless
+
 # dev tools
 black
 isort

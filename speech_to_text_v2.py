@@ -6,22 +6,22 @@ import whisperx
 from tqdm import tqdm
 
 import helpers
-from helpers import get_logger, is_on_cpu
+from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 logger = get_logger()
 
 
-if is_on_cpu():
-    batch_size = 4
-    whisperx_model = whisperx.load_model(
-        "base", "cpu", compute_type="int8", language="vi"
-    )
-else:
-    batch_size = 16  # reduce if low on GPU mem
-    whisperx_model = whisperx.load_model(
-        "large-v2", "cuda", compute_type="float16", language="vi"
-    )
+# if is_on_cpu():
+#     batch_size = 4
+#     whisperx_model = whisperx.load_model(
+#         "base", "cpu", compute_type="int8", language="vi"
+#     )
+# else:
+batch_size = 16  # reduce if low on GPU mem
+whisperx_model = whisperx.load_model(
+    "large-v2", "cuda", compute_type="float16", language="vi"
+)
 
 
 def whisperx_speech_to_text(audio_path, video_path, transcript_path):

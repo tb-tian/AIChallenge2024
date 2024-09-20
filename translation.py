@@ -3,15 +3,15 @@ from easynmt import EasyNMT
 from tqdm import tqdm
 
 import helpers
-from helpers import get_logger, is_on_cpu
+from helpers import get_logger
 from load_all_video_keyframes_info import load_all_video_keyframes_info
 
 nltk.download("punkt_tab")
 
-if is_on_cpu():
-    translate_model = EasyNMT("opus-mt")
-else:
-    translate_model = EasyNMT("m2m_100_418M")
+# if is_on_cpu():
+#     translate_model = EasyNMT("opus-mt")
+# else:
+translate_model = EasyNMT("m2m_100_418M")
 
 
 logger = get_logger()
@@ -25,7 +25,9 @@ def translate(vi_text, en_text):
         lines = file.readlines()
     tmp = ""
     for line in tqdm(lines):
-        tmp += translate_model.translate(line, target_lang="en").strip()
+        tmp += translate_model.translate(
+            line, source_lang="vi", target_lang="en"
+        ).strip()
         tmp += "\n"
     with open(en_text, "a") as file:
         file.write(tmp)

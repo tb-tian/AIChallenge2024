@@ -60,11 +60,13 @@ def is_exits(fp) -> bool:
     return p.is_file()
 
 
-def is_on_cpu() -> bool:
-    logger.warning("RUNNING ON CPU!!!")
-    print(stop_sign)
-    # return os.getenv("USE_CPU") == "true"
-    return torch.cuda.is_available()
+# def is_on_cpu() -> bool:
+#     # return os.getenv("USE_CPU") == "true"
+#     ret = not torch.cuda.is_available()
+#     if not ret:
+#       logger.warning("RUNNING ON CPU!!!")
+#       print(stop_sign)
+#     return ret
 
 
 def get_logger() -> loguru.logger:
