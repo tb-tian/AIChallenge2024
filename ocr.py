@@ -4,8 +4,6 @@ import easyocr
 from PIL import Image, ImageFilter
 import cv2
 from load_all_video_keyframes_info import load_all_video_keyframes_info
-import concurrent.futures
-
 
 all_video, video_keyframe_dict = load_all_video_keyframes_info()
 reader = easyocr.Reader(["vi", "en"], gpu=True)
@@ -34,7 +32,7 @@ def perform_ocr_on_images(image_folder, output_csv):
     data = []
     print("Starting OCR process...")
 
-    for v in all_video[:1]:
+    for v in all_video:
         for kf in video_keyframe_dict[v]:
             file_path = f"./data-staging/keyframes/{v}/{kf}.jpg"
             result = process_file(file_path)
@@ -57,15 +55,5 @@ if __name__ == "__main__":
     # for line in result:
     #     print(line)
     image_folder = "./data-staging/keyframes"
-    output_csv = "./data-staging/ocr_results.csv"
-    # perform_ocr_on_images(image_folder, output_csv)
-
-    # with Pool(8) as p:
-
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        data_all = []
-        for v in all_video:
-            for kf in video_keyframe_dict[v]:
-                file_path = f"./data-staging/keyframes/{v}/{kf}.jpg"
-                data_all.append(file_path)
-        executor.map(process_file, data_all)
+    output_csv = "ocr_results.csv"
+    perform_ocr_on_images(image_folder, output_csv)
