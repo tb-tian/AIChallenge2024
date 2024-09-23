@@ -9,11 +9,11 @@ all_video, video_keyframe_dict = load_all_video_keyframes_info()
 reader = easyocr.Reader(["vi", "en"], gpu=True)
 
 
-def preprocess_image(image_path):
-    image = Image.open(image_path)
-    image = image.convert("L")
-    image = image.filter(ImageFilter.SHARPEN)
-    return image
+# def preprocess_image(image_path):
+#     image = Image.open(image_path)
+#     image = image.convert("L")
+#     image = image.filter(ImageFilter.SHARPEN)
+#     return image
 
 
 def process_file(file_path):
