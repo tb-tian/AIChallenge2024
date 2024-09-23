@@ -36,6 +36,7 @@ def play_dialog(video, kf):
         n, pts_time, fps, frame_idx = list(islice(map_file, k + 1))[k]
         start, end = list(islice(time_file, k))[k - 1]
     st.write(f"{video},{frame_idx}")
+    st.write(f"{fps}")
     st.video(
         f"./data-source/videos/{video}.mp4",
         autoplay=True,
