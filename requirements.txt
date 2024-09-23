@@ -443,6 +443,7 @@ packaging==24.1
     #   weasel
 pandas==2.2.2
     # via
+    #   -r requirements.in
     #   pyannote-database
     #   pyannote-metrics
     #   salesforce-lavis

@@ -36,12 +36,16 @@ def play_dialog(video, kf):
         n, pts_time, fps, frame_idx = list(islice(map_file, k + 1))[k]
         start, end = list(islice(time_file, k))[k - 1]
     st.write(f"{video},{frame_idx}")
-    st.write(f"{fps}")
+    s = int(int(start) / int(fps[:-2]))
+    e = int(int(end) / int(fps[:-2]))
+    if s == e:
+        e = s + 1
+    st.write(f"{s},{e}")
     st.video(
         f"./data-source/videos/{video}.mp4",
         autoplay=True,
-        start_time=int(start) / int(fps[:-2]),
-        end_time=int(end) / int(fps[:-2]),
+        start_time= s,
+        end_time= e,
     )
     print("POPup closed")
 
