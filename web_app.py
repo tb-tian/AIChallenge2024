@@ -11,7 +11,7 @@ from PIL import Image
 from helpers import get_logger
 from hybrid_search import hybrid_search, keyframe_search
 from vectordb import VectorDB
-from videoqa import qa_engine
+# from videoqa import qa_engine
 
 WIDTH = 350
 
@@ -139,11 +139,11 @@ if __name__ == "__main__":
                         file_path = (
                             f"./data-staging/keyframes/{result[0]}/{result[1]}.jpg"
                         )
-                        response = qa_engine.ask(file_path, qa_term)
-                        if len(response) > 0:
-                            response = response[0]
-                        else:
-                            response = ""
+                        # response = qa_engine.ask(file_path, qa_term)
+                        # if len(response) > 0:
+                        #     response = response[0]
+                        # else:
+                        response = ""
                         new_search_result.append(result + (response,))
                 else:
                     new_search_result = search_result
