@@ -1,6 +1,6 @@
 import csv
 from typing import Tuple
-
+from collections import defaultdict
 import faiss
 import joblib
 import numpy as np
@@ -72,15 +72,22 @@ def document_querying(query):
     # Compute cosine similarity between the query and the documents
     cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
 
-    result = {}
+    # Create a dictionary that maps (video, chunk) to keyframes
+    mapping_dict = defaultdict(list)
+    for _, row in mapping_df.iterrows():
+        mapping_dict[(row['video'], row['chunk'])].append(row['keyframe'])
+
+    # Use defaultdict for the result dictionary
+    result = defaultdict(dict)
+
     for idx, score in enumerate(cosine_similarities):
         video, chunk = embedding_info[idx]
-        mapping_row = mapping_df[(mapping_df['video'] == video) & (mapping_df['chunk'] == chunk)]
-        for kf in mapping_row['keyframe']:
-            if video not in result:
-                result[video] = {}
+        keyframes = mapping_dict[(video, chunk)]
+        for kf in keyframes:
             result[video][kf] = score
 
+    # Convert result back to a regular dictionary if needed
+    result = dict(result)
 
     return result
 
