@@ -43,7 +43,7 @@ def embedding():
     tfidf_index = faiss.IndexFlatL2(d)
     tfidf_index.add(tfidf_matrix.toarray().astype(np.float32))
 
-    faiss.write_index(tfidf_index, "./data-index/tfidf.index")
+    save_npz('./data-index/tfidf_matrix.npz', tfidf_matrix)
     joblib.dump(vectorizer, "./data-index/tfidf_vectorizer.pkl")
     joblib.dump(embedding_info, "./data-index/document_embedding_info.pkl")
 
@@ -57,7 +57,7 @@ def querying(query):
     # Vectorize the query
     query_vector = vectorizer.transform([query])
 
-    # Compute cosine similarity between the query and the documents
+    # Compute cosine similarity nbetween the query and the documents
     cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
 
     # Find the indices of the top 5 most similar documents

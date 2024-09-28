@@ -61,32 +61,26 @@ def keyframe_querying(query):
 
 def document_querying(query):
     # Load the data
-    document_index = faiss.read_index("./data-index/tfidf.index")
+    tfidf_matrix = load_npz("./data-index/tfidf_matrix.npz")
     vectorizer = joblib.load("./data-index/tfidf_vectorizer.pkl")
     embedding_info = joblib.load("./data-index/document_embedding_info.pkl")
     mapping_df = pd.read_csv("./data-index/mapping.csv", dtype={"keyframe": str})
 
-    print(f"loaded {document_index.ntotal} documents")
+    print(f"loaded {tfidf_matrix.shape[0]} documents")
 
-    query_feature = vectorizer.transform([query])
-    query_embedding = query_feature.toarray().reshape(1, -1).astype("float32")
-    query_embedding = normalize(query_embedding, axis=1)
-
-    # Search the FAISS index
-    limit = document_index.ntotal
-    distances, indices = document_index.search(query_embedding, limit)
+    query_vector = vectorizer.transform([query])
+    # Compute cosine similarity between the query and the documents
+    cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
 
     result = {}
-    for idx, score in zip(indices[0], distances[0]):
+    for idx, score in enumerate(cosine_similarities):
         video, chunk = embedding_info[idx]
-
-        mapping_row = mapping_df[
-            (mapping_df["video"] == video) & (mapping_df["chunk"] == chunk)
-        ]
-        for kf in mapping_row["keyframe"]:
+        mapping_row = mapping_df[(mapping_df['video'] == video) & (mapping_df['chunk'] == chunk)]
+        for kf in mapping_row['keyframe']:
             if video not in result:
                 result[video] = {}
             result[video][kf] = score
+
 
     return result
 
@@ -165,6 +159,10 @@ def hybrid_search(query, limit=100) -> Tuple[str, str, float]:
     logger.debug("rerank")
     rerank = []
     for v in all_video:
+        if v not in ranked_kf_dic:
+            continue
+        if v not in ranked_doc_dic:
+            continue
         for kf in video_keyframe_dict[v]:
             if ranked_kf_dic[v].get(kf) is None:
                 continue
