@@ -14,7 +14,7 @@ def mapping_from_keyframe_to_audio_chunk(video_id):
     # determine which audio chunk would the keyframe belongs to
     keyframe_path = f"./data-staging/map-keyframes/{video_id}.csv"
     chunk_path = f"./data-staging/audio-chunk-timestamps/{video_id}.csv"
-    tmp_vid_mapping = "/tmp/mapping.csv"
+    tmp_vid_mapping = "./tmp/mapping.csv"
     video_keyframe_chunk_dict = {video_id: {}}
 
     with open(keyframe_path) as keyframe_file, open(chunk_path) as chunk_file, open(
