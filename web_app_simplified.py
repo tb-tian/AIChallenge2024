@@ -132,7 +132,7 @@ if __name__ == "__main__":
                 else:
                     logger.info("fetch from source")
                     st.session_state["search_result"] = keyframe_search(
-                        search_term, limit=120
+                        search_term, limit=300
                     )
                     cached[search_term] = st.session_state["search_result"]
                 search_results = st.session_state["search_result"]
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                 else:
                     logger.info("fetch from source")
                     st.session_state["hybrid_results"] = hybrid_search(
-                        search_term, limit=120
+                        search_term, limit=300
                     )
                     cached[search_term] = st.session_state["hybrid_results"]
                 search_results = st.session_state["hybrid_results"]
